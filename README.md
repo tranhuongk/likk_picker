@@ -139,13 +139,13 @@ Add following content to `info.plist`.
     <table>
         <tr>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/gallery.gif" width="200"/>
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/gallery.gif" width="200"/>
             </td>            
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/1.jpg" width="200"/>
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/1.jpg" width="200"/>
             </td>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/7.jpg" width="200" />
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/7.jpg" width="200" />
             </td>
         </tr> 
     </table>
@@ -154,13 +154,13 @@ Add following content to `info.plist`.
     <table>
         <tr>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/photo_editor.gif" width="200"/>
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/photo_editor.gif" width="200"/>
             </td>            
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/5.jpg" width="200"/>
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/5.jpg" width="200"/>
             </td>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/6.jpg" width="200" />
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/6.jpg" width="200" />
             </td>
         </tr> 
     </table>
@@ -249,13 +249,13 @@ GalleryViewField(
     <table>
         <tr>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/camera.gif" width="200"/>
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/camera.gif" width="200"/>
             </td>            
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/8.jpg" width="200"/>
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/8.jpg" width="200"/>
             </td>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/12.jpg" width="200" />
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/12.jpg" width="200" />
             </td>
         </tr> 
     </table>
@@ -264,13 +264,13 @@ GalleryViewField(
     <table>
         <tr>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/playground.gif" width="200"/>
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/playground.gif" width="200"/>
             </td>            
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/photo_editor.gif" width="200"/>
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/photo_editor.gif" width="200"/>
             </td>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/dev/assets/10.jpg" width="200" />
+                <img src="https://raw.githubusercontent.com/tranhuongk/likk_picker/master/assets/10.jpg" width="200" />
             </td>
         </tr> 
     </table>
