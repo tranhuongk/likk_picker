@@ -1,0 +1,30 @@
+name: likk_picker
+description: Custom camera and gallery picker clone and custom of likk_picker. 
+version: 1.0.0
+homepage: https://github.com/tranhuongk/likk_picker
+
+environment:
+  sdk: ">=2.13.0 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  camera: ^0.8.1+7
+  photo_manager: ^1.2.9
+  uuid: ^3.0.4
+  path: ^1.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^2.1.2
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: CustomIcons
+      fonts:
+        - asset: lib/assets/fonts/CustomIcons.ttf
+    - family: ShapeIcons
+      fonts:
+        - asset: lib/assets/fonts/ShapeIcons.ttf
