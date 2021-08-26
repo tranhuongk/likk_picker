@@ -132,12 +132,6 @@ class _AnimatedDropdown extends StatelessWidget {
   final Widget Function(BuildContext, BaseState<AssetPathEntity>, Widget?)?
       builder;
 
-  void _onTap(bool visible) {
-    if (controller.value.selectedEntities.isEmpty) {
-      onPressed(visible);
-    }
-  }
-
   Widget _child(bool visible) {
     return ValueListenableBuilder<AlbumType>(
       valueListenable: albumNotifier,
@@ -179,24 +173,18 @@ class _AnimatedDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return GalleryBuilder(
       controller: controller,
-      builder: (value, child) {
-        return AnimatedOpacity(
-          opacity: value.selectedEntities.isEmpty ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 200),
-          child: child,
-        );
-      },
+      builder: (value, child) => child!,
       child: ValueListenableBuilder<bool>(
         valueListenable: albumVisibility,
         builder: (context, visible, child) {
           return Platform.isAndroid
               ? InkWell(
-                  onTap: () => _onTap(visible),
+                  onTap: () => onPressed(visible),
                   child: _child(visible),
                 )
               : CupertinoButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => _onTap(visible),
+                  onPressed: () => onPressed(visible),
                   child: _child(visible),
                 );
         },
@@ -237,6 +225,7 @@ class _IconButton extends StatelessWidget {
         ? Material(
             clipBehavior: Clip.hardEdge,
             borderRadius: BorderRadius.circular(size ?? 40.0),
+            color: Colors.transparent,
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: iconWidget,

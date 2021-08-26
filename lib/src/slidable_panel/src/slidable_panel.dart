@@ -426,10 +426,13 @@ class _SlidablePanelState extends State<SlidablePanel>
   @override
   Widget build(BuildContext context) {
     _mediaQuery = MediaQuery.of(context);
+    if (_mediaQuery.viewInsets.bottom != 0) {
+      return const SizedBox();
+    }
     _panelMaxHeight = _setting.maxHeight ??
         _mediaQuery.size.height -
             (_headerSetting.topMargin ?? _mediaQuery.padding.top);
-    _panelMinHeight = _setting.minHeight ?? _panelMaxHeight * 0.35;
+    _panelMinHeight = _setting.minHeight ?? _panelMaxHeight * 0.35 ;
     _remainingSpace = _panelMaxHeight - _panelMinHeight;
 
     return ValueListenableBuilder<bool>(
