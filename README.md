@@ -1,4 +1,4 @@
-<h1 align="center">Likk Picker ()</h1>
+<h1 align="center">Likk Picker</h1>
 
 <p align="center">
   <a href="https://flutter.dev">
@@ -15,7 +15,7 @@
 
 ---
 
-<p align="center">A flutter package which is clone of facebook messenger gallery picker and camera, combined as single component. Gallery view and Camera view can also be use as Flutter widget. Under the hood likk picker used <a href="https://pub.dev/packages/photo_manager">Photo Manager</a> and <a href="https://pub.dev/packages/camera">Camera</a>. Custom from <a href="https://pub.dev/packages/drishya_picker">Drishya Picker</a></p>
+<p align="center">A flutter package which is clone of facebook messenger gallery picker and camera, combined as single component. Gallery view and Camera view can also be use as Flutter widget. Under the hood likk picker used <a href="https://pub.dev/packages/photo_manager">Photo Manager</a> and <a href="https://pub.dev/packages/camera">Camera</a>. Custom from <a href="https://pub.dev/packages/drishya_picker">Drishya Picker</a>.</p>
 
 ---
 
