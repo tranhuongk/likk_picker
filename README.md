@@ -310,9 +310,4 @@ If you encounter any problems feel free to open an [issue](https://github.com/tr
 
 # Maintainers
 
-- [Huong Tran](https://github.com/tranhuongk)
-
-  <a href="https://twitter.com/TrnVnHn34679728">
-    <img src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Ftranhuongk"
-      alt="Twitter" />
-  </a>
+- [Huong Tran](https://tranhuongk.xyz/)
