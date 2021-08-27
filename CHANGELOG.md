@@ -1,4 +1,4 @@
-## [1.0.3] - 27/08/2021
+## [1.0.4] - 27/08/2021
 * Fix bug show action button
 * Add `cameraItemWidget` for GallerySetting for custom camera widget
 * Fix bug call Function `completeTask`
