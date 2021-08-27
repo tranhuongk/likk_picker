@@ -703,9 +703,6 @@ class GalleryController extends ValueNotifier<GalleryValue> {
           else {
             setting.onReachedMaximumLimit!();
           }
-          if (setting.onItemClick != null) {
-            setting.onItemClick!(entity, selectedList);
-          }
           return;
         }
         selectedList.add(entity);
