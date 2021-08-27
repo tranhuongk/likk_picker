@@ -97,8 +97,9 @@ class GallerySetting {
 
   ///
   /// On select item callback
+  /// Result is: clicked item and selected list
   ///
-  final Function(LikkEntity)? onItemClick;
+  final Function(LikkEntity, List<LikkEntity>)? onItemClick;
 
   /// Show Edit, Select action
   final bool showActionButton;
@@ -136,7 +137,7 @@ class GallerySetting {
     bool? enableCamera,
     int? crossAxisCount,
     bool Function()? onUnselectAll,
-    Function(LikkEntity)? onSelect,
+    Function(LikkEntity, List<LikkEntity>)? onSelect,
     bool? showActionButton,
     Alignment? selectionCountAlignment,
     TextStyle? selectionCountTextStyle,

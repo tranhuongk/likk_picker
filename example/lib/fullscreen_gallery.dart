@@ -28,7 +28,7 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
       gallerySetting: GallerySetting(
         maximum: 2,
         requestType: RequestType.common,
-        onItemClick: (list) {},
+        onItemClick: (item, list) {},
         enableCamera: true,
         crossAxisCount: 4,
         onUnselectAll: () => true,
