@@ -678,6 +678,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
   /// Selecting and unselecting entities
   void _select(LikkEntity entity, BuildContext context) {
+    if (setting.onItemClick != null) setting.onItemClick!(entity);
     if (singleSelection) {
       _onChanged?.call(entity, false);
       completeTask(context);
@@ -711,7 +712,6 @@ class GalleryController extends ValueNotifier<GalleryValue> {
         selectedEntities: selectedList,
         previousSelection: false,
       );
-      if (setting.onItemClick != null) setting.onItemClick!(selectedList);
     }
   }
 
