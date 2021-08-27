@@ -1,4 +1,9 @@
 ## [1.0.3] - 27/08/2021
+* Fix bug show action button
+* Add `cameraItemWidget` for GallerySetting for custom camera widget
+* Fix bug call Function `completeTask`
+
+## [1.0.3] - 27/08/2021
 
 * Move `selectedStyle`, `padding`, `space`, `itemBorderRadius`, `albumColor`, `albumImageSize`, `albumBorderRadius`, `albumTitleStyle`, `albumSubTitleStyle` from PanelSetting to GallerySetting
 * Add `elevation` for HeaderSetting
