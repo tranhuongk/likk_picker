@@ -401,14 +401,14 @@ class _GalleryViewState extends State<GalleryView>
               ),
 
               // Send and edit button
-              if (_controller.setting.showActionButton)
-                GalleryAssetSelector(
-                  controller: _controller,
-                  onEdit: (e) {
-                    _controller._openPlayground(context, e);
-                  },
-                  onSubmit: _controller.completeTask,
-                ),
+              _controller.setting.actionButton ??
+                  GalleryAssetSelector(
+                    controller: _controller,
+                    onEdit: (e) {
+                      _controller._openPlayground(context, e);
+                    },
+                    onSubmit: _controller.completeTask,
+                  ),
 
               // Album list
               AnimatedBuilder(
@@ -638,7 +638,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   final ValueNotifier<bool> _albumVisibility;
 
   // Completer for gallerry picker controller
-  late Completer<List<LikkEntity>> _completer;
+  Completer<List<LikkEntity>> _completer = Completer<List<LikkEntity>>();
 
   // Flag to handle updating controller value internally
   var _internal = false;
@@ -733,7 +733,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     }
     _onSubmitted?.call(value.selectedEntities);
     _completer.complete(value.selectedEntities);
-    _internal = true;
+    // _internal = true;
     // value = const GalleryValue();
   }
 
@@ -868,13 +868,13 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       _panelController.openPanel();
       FocusScope.of(context).unfocus();
     }
-    if (!singleSelection && (selectedEntities?.isNotEmpty ?? false)) {
-      _internal = true;
-      value = value.copyWith(
-        selectedEntities: selectedEntities,
-        previousSelection: true,
-      );
-    }
+    // if (!singleSelection && (selectedEntities?.isNotEmpty ?? false)) {
+    //   _internal = true;
+    //   value = value.copyWith(
+    //     selectedEntities: selectedEntities,
+    //     previousSelection: true,
+    //   );
+    // }
 
     return _completer.future;
   }

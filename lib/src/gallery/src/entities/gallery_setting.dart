@@ -17,7 +17,7 @@ class GallerySetting {
     this.onItemClick,
     this.onReachedMaximumLimit,
     this.selectionCountAlignment = Alignment.center,
-    this.showActionButton = false,
+    this.actionButton = const SizedBox(),
     this.selectionCountTextStyle,
     this.selectionCountBackgroundColor,
     this.selectionCountBackgroundSize,
@@ -34,6 +34,7 @@ class GallerySetting {
     this.albumBorderRadius,
     this.albumTitleStyle,
     this.albumSubTitleStyle,
+    this.cameraItemWidget,
   });
 
   /// Padding for panel content
@@ -102,7 +103,7 @@ class GallerySetting {
   final Function(LikkEntity, List<LikkEntity>)? onItemClick;
 
   /// Show Edit, Select action
-  final bool showActionButton;
+  final Widget? actionButton;
 
   /// Set position for selection count
   final Alignment selectionCountAlignment;
@@ -128,6 +129,9 @@ class GallerySetting {
   /// Set background for selection count
   final Widget Function(int index)? selectionCountBuilder;
 
+  /// Custom Widget for camera item
+  final Widget? cameraItemWidget;
+
   /// Helper function
   GallerySetting copyWith({
     SelectedStyle? selectedStyle,
@@ -137,8 +141,8 @@ class GallerySetting {
     bool? enableCamera,
     int? crossAxisCount,
     bool Function()? onUnselectAll,
-    Function(LikkEntity, List<LikkEntity>)? onSelect,
-    bool? showActionButton,
+    Function(LikkEntity, List<LikkEntity>)? onItemClick,
+    Widget? actionButton,
     Alignment? selectionCountAlignment,
     TextStyle? selectionCountTextStyle,
     Color? selectionCountBackgroundColor,
@@ -155,6 +159,7 @@ class GallerySetting {
     BorderRadius? albumBorderRadius,
     TextStyle? albumTitleStyle,
     TextStyle? albumSubTitleStyle,
+    Widget? cameraItemWidget,
   }) {
     return GallerySetting(
       requestType: requestType ?? this.requestType,
@@ -162,12 +167,12 @@ class GallerySetting {
       enableCamera: enableCamera ?? this.enableCamera,
       crossAxisCount: crossAxisCount ?? this.crossAxisCount,
       onUnselectAll: onUnselectAll ?? this.onUnselectAll,
-      onItemClick: onSelect ?? this.onItemClick,
+      onItemClick: onItemClick ?? this.onItemClick,
       onReachedMaximumLimit:
           onReachedMaximumLimit ?? this.onReachedMaximumLimit,
       selectionCountAlignment:
           selectionCountAlignment ?? this.selectionCountAlignment,
-      showActionButton: showActionButton ?? this.showActionButton,
+      actionButton: actionButton ?? this.actionButton,
       selectionCountTextStyle:
           selectionCountTextStyle ?? this.selectionCountTextStyle,
       selectionCountBackgroundColor:
@@ -190,6 +195,7 @@ class GallerySetting {
       albumBorderRadius: albumBorderRadius ?? this.albumBorderRadius,
       albumTitleStyle: albumTitleStyle ?? this.albumTitleStyle,
       albumSubTitleStyle: albumSubTitleStyle ?? this.albumSubTitleStyle,
+      cameraItemWidget: cameraItemWidget ?? this.cameraItemWidget,
     );
   }
 }

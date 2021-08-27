@@ -26,7 +26,7 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
         enableCamera: true,
         maximum: 2,
         requestType: RequestType.all,
-        showActionButton: true,
+        actionButton: null,
       ),
       panelSetting: PanelSetting(
         background: Image.asset('../assets/bg.jpeg', fit: BoxFit.cover),

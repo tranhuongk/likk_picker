@@ -99,16 +99,16 @@ class GalleryGridView extends StatelessWidget {
                     return ClipRRect(
                       borderRadius: controller.setting.itemBorderRadius ??
                           BorderRadius.circular(8),
-                      child: ColoredBox(
-                        color: Colors.black,
-                        child: InkWell(
-                          onTap: () => onCameraRequest(context),
-                          child: Icon(
-                            CupertinoIcons.photo_camera_solid,
-                            color: Colors.lightBlue.shade300,
-                            size: 26,
-                          ),
-                        ),
+                      child: GestureDetector(
+                        onTap: () => onCameraRequest(context),
+                        child: controller.setting.cameraItemWidget ??
+                            const ColoredBox(
+                              color: Colors.black,
+                              child: Icon(
+                                CupertinoIcons.photo_camera_solid,
+                                color: Colors.white,
+                              ),
+                            ),
                       ),
                     );
                   }

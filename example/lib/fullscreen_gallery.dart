@@ -26,25 +26,30 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
     super.initState();
     controller = GalleryController(
       gallerySetting: GallerySetting(
-        maximum: 2,
-        requestType: RequestType.common,
-        onItemClick: (item, list) {},
-        enableCamera: true,
-        crossAxisCount: 4,
-        onUnselectAll: () => true,
-        onReachedMaximumLimit: () {},
-        showActionButton: false,
-        selectionCountAlignment: Alignment.topRight,
-        selectionCountRingSize: 5,
-        selectedStyle: SelectedStyle.border,
-        albumColor: Colors.greenAccent,
-        albumBorderRadius: BorderRadius.zero,
-        space: 0,
-        itemBorderRadius: BorderRadius.zero,
-        albumImageSize: 60,
-        albumSubTitleStyle: const TextStyle(color: Colors.black),
-        albumTitleStyle: const TextStyle(color: Colors.black),
-      ),
+          maximum: 2,
+          requestType: RequestType.common,
+          onItemClick: (item, list) {},
+          enableCamera: true,
+          crossAxisCount: 4,
+          onUnselectAll: () => true,
+          onReachedMaximumLimit: () {},
+          selectionCountAlignment: Alignment.topRight,
+          selectionCountRingSize: 5,
+          selectedStyle: SelectedStyle.border,
+          albumColor: Colors.greenAccent,
+          albumBorderRadius: BorderRadius.zero,
+          space: 0,
+          itemBorderRadius: BorderRadius.zero,
+          albumImageSize: 60,
+          albumSubTitleStyle: const TextStyle(color: Colors.black),
+          albumTitleStyle: const TextStyle(color: Colors.black),
+          cameraItemWidget: const ColoredBox(
+            color: Colors.red,
+            child: Icon(
+              CupertinoIcons.photo_camera_solid,
+              color: Colors.white,
+            ),
+          )),
       headerSetting: HeaderSetting(
         headerMaxHeight: 56,
         elevation: 2,
@@ -62,7 +67,7 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
           //   controller.completeTask(context);
           // },
           onTap: () {
-            controller.openCamera(context);
+            controller.completeTask(context);
           },
           child: const SizedBox(
             width: 50,
