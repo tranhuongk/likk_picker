@@ -49,8 +49,8 @@ class GalleryGridView extends StatelessWidget {
           child: controller.panelSetting.background,
         ),
         ClipRRect(
-          borderRadius: controller.panelSetting.itemBorderRadius ??
-              BorderRadius.circular(8),
+          borderRadius:
+              controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
           child: ValueListenableBuilder<EntitiesType>(
             valueListenable: entitiesNotifier,
             builder: (context, state, child) {
@@ -84,21 +84,20 @@ class GalleryGridView extends StatelessWidget {
 
               return GridView.builder(
                 controller: panelController.scrollController,
-                padding:
-                    (controller.panelSetting.padding ?? const EdgeInsets.all(8))
-                        .add(EdgeInsets.only(
+                padding: (controller.setting.padding ?? const EdgeInsets.all(8))
+                    .add(EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom,
                 )),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: controller.setting.crossAxisCount ?? 3,
-                  crossAxisSpacing: controller.panelSetting.space ?? 1.5,
-                  mainAxisSpacing: controller.panelSetting.space ?? 1.5,
+                  crossAxisSpacing: controller.setting.space ?? 1.5,
+                  mainAxisSpacing: controller.setting.space ?? 1.5,
                 ),
                 itemCount: itemCount,
                 itemBuilder: (context, index) {
                   if (controller.setting.enableCamera && index == 0) {
                     return ClipRRect(
-                      borderRadius: controller.panelSetting.itemBorderRadius ??
+                      borderRadius: controller.setting.itemBorderRadius ??
                           BorderRadius.circular(8),
                       child: ColoredBox(
                         color: Colors.black,
@@ -120,7 +119,7 @@ class GalleryGridView extends StatelessWidget {
                   final entity = state.isLoading ? null : entities[ind];
 
                   return ClipRRect(
-                    borderRadius: controller.panelSetting.itemBorderRadius ??
+                    borderRadius: controller.setting.itemBorderRadius ??
                         BorderRadius.circular(8),
                     child: _MediaTile(
                       controller: controller,
@@ -172,8 +171,7 @@ class _MediaTile extends StatelessWidget {
               snapshot.data != null;
 
           if (hasData) {
-            final dEntity =
-                LikkEntity(entity: entity!, bytes: snapshot.data!);
+            final dEntity = LikkEntity(entity: entity!, bytes: snapshot.data!);
             return GestureDetector(
               onTap: () {
                 onPressed(dEntity);
@@ -304,7 +302,7 @@ class _SelectionCount extends StatelessWidget {
 
         final firstChild = index == -1
             ? const SizedBox()
-            : controller.panelSetting.selectedStyle == SelectedStyle.border
+            : controller.setting.selectedStyle == SelectedStyle.border
                 ? DecoratedBox(
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -313,7 +311,7 @@ class _SelectionCount extends StatelessWidget {
                                 Theme.of(context).primaryColor,
                         width: 4,
                       ),
-                      borderRadius: controller.panelSetting.itemBorderRadius ??
+                      borderRadius: controller.setting.itemBorderRadius ??
                           BorderRadius.circular(8),
                     ),
                     child: secondChild,

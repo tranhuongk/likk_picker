@@ -38,7 +38,7 @@ class CameraOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:  Stack(
+      child: Stack(
         fit: StackFit.expand,
         children: [
           // preview, input type page view and camera

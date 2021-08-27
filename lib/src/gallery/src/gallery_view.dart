@@ -218,8 +218,8 @@ class _GalleryViewState extends State<GalleryView>
 
   //
   void _showAlert(GallerySetting gallerySetting) {
-    if (gallerySetting.onUnselect != null) {
-      if (gallerySetting.onUnselect!()) {
+    if (gallerySetting.onUnselectAll != null) {
+      if (gallerySetting.onUnselectAll!()) {
         _onSelectionClear();
       }
       return;
@@ -301,7 +301,7 @@ class _GalleryViewState extends State<GalleryView>
   }
 
   void _onSelectionClear() {
-    _controller._clearSelection();
+    _controller.clearSelection();
     Navigator.of(context).pop();
   }
 
@@ -379,12 +379,13 @@ class _GalleryViewState extends State<GalleryView>
                     },
                   ),
 
-                  // Divider
-                  Divider(
-                    color: Colors.lightBlue.shade300,
-                    thickness: 0.3,
-                    height: 2.0,
-                  ),
+                  if (_controller.headerSetting.elevation != 0)
+                    // Divider
+                    Divider(
+                      color: Colors.black,
+                      thickness: 0,
+                      height: _controller.headerSetting.elevation,
+                    ),
 
                   // Gallery grid
                   Expanded(
@@ -658,6 +659,9 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
   final _wrapperKey = GlobalKey();
 
+  // ignore: public_member_api_docs
+  bool get isShowPanel => _panelController.isVisible;
+
   ///
   void _setAlbumVisibility(bool visible) {
     _panelController.isGestureEnabled = !visible;
@@ -665,7 +669,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// Clear selected entities
-  void _clearSelection() {
+  void clearSelection() {
     _onSubmitted?.call([]);
     _clearedSelection = true;
     _internal = true;
@@ -707,6 +711,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
         selectedEntities: selectedList,
         previousSelection: false,
       );
+      if (setting.onItemClick != null) setting.onItemClick!(selectedList);
     }
   }
 

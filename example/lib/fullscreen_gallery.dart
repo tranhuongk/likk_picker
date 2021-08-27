@@ -28,18 +28,28 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
       gallerySetting: GallerySetting(
         maximum: 2,
         requestType: RequestType.common,
+        onItemClick: (list) {},
         enableCamera: true,
         crossAxisCount: 4,
-        onUnselect: () => true,
+        onUnselectAll: () => true,
         onReachedMaximumLimit: () {},
         showActionButton: false,
         selectionCountAlignment: Alignment.topRight,
         selectionCountRingSize: 5,
+        selectedStyle: SelectedStyle.border,
+        albumColor: Colors.greenAccent,
+        albumBorderRadius: BorderRadius.zero,
+        space: 0,
+        itemBorderRadius: BorderRadius.zero,
+        albumImageSize: 60,
+        albumSubTitleStyle: const TextStyle(color: Colors.black),
+        albumTitleStyle: const TextStyle(color: Colors.black),
       ),
       headerSetting: HeaderSetting(
         headerMaxHeight: 56,
+        elevation: 2,
         albumFit: FlexFit.tight,
-        // headerBackground: Image.asset('../assets/bg.jpeg', fit: BoxFit.cover),
+        headerBackground: Image.asset('../assets/bg.jpeg', fit: BoxFit.cover),
         albumBuilder: (context, album, child) => Text(
           album.data?.name ?? 'Unknown',
           style: Theme.of(context).textTheme.subtitle2!.copyWith(
@@ -67,12 +77,6 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
       // ignore: prefer_const_constructors
       panelSetting: PanelSetting(
         background: Image.asset('../assets/bg.jpeg', fit: BoxFit.cover),
-        albumColor: Colors.greenAccent,
-        albumBorderRadius: BorderRadius.circular(16),
-        albumImageSize: 60,
-        albumSubTitleStyle: const TextStyle(color: Colors.black),
-        albumTitleStyle: const TextStyle(color: Colors.black),
-        selectedStyle: SelectedStyle.border,
       ),
     );
     notifier = ValueNotifier(<LikkEntity>[]);

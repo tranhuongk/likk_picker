@@ -71,7 +71,7 @@ class GalleryAlbumView extends StatelessWidget {
         }
         // Album list
         return ColoredBox(
-          color: controller.panelSetting.albumColor ?? Colors.grey,
+          color: controller.setting.albumColor ?? Colors.grey,
           child: CupertinoScrollbar(
             child: ListView.builder(
               padding: const EdgeInsets.only(top: 16).copyWith(
@@ -83,9 +83,10 @@ class GalleryAlbumView extends StatelessWidget {
                 final entity = state.data![index];
                 return _Album(
                   panelSetting: controller.panelSetting,
+                  setting: controller.setting,
                   entity: entity,
                   onPressed: onAlbumChange,
-                  color: controller.panelSetting.albumColor ?? Colors.grey,
+                  color: controller.setting.albumColor ?? Colors.grey,
                 );
               },
             ),
@@ -101,19 +102,21 @@ class _Album extends StatelessWidget {
     Key? key,
     required this.entity,
     required this.panelSetting,
+    required this.setting,
     this.onPressed,
     this.color = Colors.grey,
   }) : super(key: key);
 
   final AssetPathEntity entity;
   final PanelSetting panelSetting;
+  final GallerySetting setting;
   final Color color;
   final Function(AssetPathEntity album)? onPressed;
 
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    final int imageSize = panelSetting.albumImageSize ?? 48;
+    final int imageSize = setting.albumImageSize ?? 48;
     return GestureDetector(
       onTap: () {
         onPressed?.call(entity);
@@ -126,7 +129,7 @@ class _Album extends StatelessWidget {
             // Image
             ClipRRect(
               borderRadius:
-                  panelSetting.albumBorderRadius ?? BorderRadius.circular(8),
+                  setting.albumBorderRadius ?? BorderRadius.circular(8),
               child: Container(
                 height: imageSize.toDouble(),
                 width: imageSize.toDouble(),
@@ -172,7 +175,7 @@ class _Album extends StatelessWidget {
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
-                    ).merge(panelSetting.albumTitleStyle),
+                    ).merge(setting.albumTitleStyle),
                   ),
                   const SizedBox(height: 4.0),
                   // Total photos
@@ -181,7 +184,7 @@ class _Album extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontSize: 13.0,
-                    ).merge(panelSetting.albumSubTitleStyle),
+                    ).merge(setting.albumSubTitleStyle),
                   ),
                 ],
               ),

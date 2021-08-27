@@ -40,11 +40,13 @@ class HeaderSetting {
     this.headerRightWidget = const SizedBox(),
     this.albumBuilder,
     this.albumFit = FlexFit.loose,
+    this.elevation = 0,
   });
 
   /// Margin for panel top. Which can be used to show status bar if you need
   /// to show panel above scaffold.
   final double? topMargin;
+  final double elevation;
 
   ///
   final FlexFit albumFit;
@@ -83,8 +85,9 @@ class HeaderSetting {
     double? headerMaxHeight,
     double? headerMinHeight,
     Widget? headerBackground,
-    dynamic headerLeftWidtet = Icons.close,
-    Widget headerRightWidtet = const SizedBox(),
+    double? elevation,
+    dynamic headerLeftWidget,
+    Widget? headerRightWidget,
     Widget Function(BuildContext, BaseState<AssetPathEntity>, Widget?)?
         albumBuilder,
   }) {
@@ -93,9 +96,10 @@ class HeaderSetting {
       headerMaxHeight: headerMaxHeight ?? this.headerMaxHeight,
       headerMinHeight: headerMinHeight ?? this.headerMinHeight,
       headerBackground: headerBackground ?? this.headerBackground,
-      headerLeftWidget: headerLeftWidtet,
-      headerRightWidget: headerRightWidtet,
-      albumBuilder: albumBuilder,
+      headerLeftWidget: headerLeftWidget ?? this.headerLeftWidget,
+      headerRightWidget: headerRightWidget ?? this.headerRightWidget,
+      albumBuilder: albumBuilder ?? this.albumBuilder,
+      elevation: elevation ?? this.elevation,
     );
   }
 }
@@ -114,33 +118,10 @@ class PanelSetting {
     this.snapingPoint = 0.4,
     this.background = const SizedBox(),
     this.overlayStyle = SystemUiOverlayStyle.dark,
-    this.padding,
-    this.selectedStyle = SelectedStyle.border,
-    this.space,
-    this.itemBorderRadius,
-    this.albumColor,
-    this.albumImageSize,
-    this.albumBorderRadius,
-    this.albumTitleStyle,
-    this.albumSubTitleStyle,
   }) : assert(
           snapingPoint >= 0.0 && snapingPoint <= 1.0,
           '[snapingPoint] value must be between 1.0 and 0.0',
         );
-
-  /// Padding for panel content
-  final EdgeInsets? padding;
-
-  /// Item selected style
-  /// Default: SelectedStyle.border
-  final SelectedStyle? selectedStyle;
-
-  /// Space for items
-  final double? space;
-
-  /// BorderRadius of item
-  /// Default: BorderRadius.circular(8)
-  final BorderRadius? itemBorderRadius;
 
   /// Panel maximum height
   ///
@@ -158,21 +139,6 @@ class PanelSetting {
   /// Default: 0.4
   final double snapingPoint;
 
-  ///
-  final Color? albumColor;
-
-  ///
-  final int? albumImageSize;
-
-  ///
-  final BorderRadius? albumBorderRadius;
-
-  ///
-  final TextStyle? albumTitleStyle;
-
-  ///
-  final TextStyle? albumSubTitleStyle;
-
   /// Background widget for panel,
   /// Default: [Sizebox()]
   final Widget background;
@@ -186,30 +152,12 @@ class PanelSetting {
     double? maxHeight,
     double? snapingPoint,
     Widget? background,
-    EdgeInsets? padding,
-    double? space,
-    BorderRadius? itemBorderRadius,
-    Color? albumColor,
-    int? albumImageSize,
-    BorderRadius? albumBorderRadius,
-    TextStyle? albumTitle,
-    TextStyle? albumSubTitle,
-    SelectedStyle selectedStyle = SelectedStyle.border,
   }) {
     return PanelSetting(
       minHeight: minHeight ?? this.minHeight,
       maxHeight: maxHeight ?? this.maxHeight,
       snapingPoint: snapingPoint ?? this.snapingPoint,
       background: background ?? this.background,
-      padding: padding,
-      space: space,
-      itemBorderRadius: itemBorderRadius,
-      albumColor: albumColor,
-      albumImageSize: albumImageSize,
-      albumBorderRadius: albumBorderRadius,
-      albumTitleStyle: albumTitle,
-      albumSubTitleStyle: albumSubTitle,
-      selectedStyle: selectedStyle,
     );
   }
 }
@@ -432,7 +380,7 @@ class _SlidablePanelState extends State<SlidablePanel>
     _panelMaxHeight = _setting.maxHeight ??
         _mediaQuery.size.height -
             (_headerSetting.topMargin ?? _mediaQuery.padding.top);
-    _panelMinHeight = _setting.minHeight ?? _panelMaxHeight * 0.35 ;
+    _panelMinHeight = _setting.minHeight ?? _panelMaxHeight * 0.35;
     _remainingSpace = _panelMaxHeight - _panelMinHeight;
 
     return ValueListenableBuilder<bool>(
