@@ -401,14 +401,14 @@ class _GalleryViewState extends State<GalleryView>
               ),
 
               // Send and edit button
-              _controller.setting.actionButton ??
-                  GalleryAssetSelector(
-                    controller: _controller,
-                    onEdit: (e) {
-                      _controller._openPlayground(context, e);
-                    },
-                    onSubmit: _controller.completeTask,
-                  ),
+
+              GalleryAssetSelector(
+                controller: _controller,
+                onEdit: (e) {
+                  _controller._openPlayground(context, e);
+                },
+                onSubmit: _controller.completeTask,
+              ),
 
               // Album list
               AnimatedBuilder(
@@ -912,13 +912,13 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
   @override
   void dispose() {
-    _panelController.dispose();
-    _albumsNotifier.dispose();
-    _albumNotifier.dispose();
-    _entitiesNotifier.dispose();
-    _recentEntities.dispose();
-    _albumVisibility.dispose();
-    super.dispose();
+    if (_panelController.hasListeners) _panelController.dispose();
+    if (_albumsNotifier.hasListeners) _albumsNotifier.dispose();
+    if (_albumNotifier.hasListeners) _albumNotifier.dispose();
+    if (_entitiesNotifier.hasListeners) _entitiesNotifier.dispose();
+    if (_recentEntities.hasListeners) _recentEntities.dispose();
+    if (_albumVisibility.hasListeners) _albumVisibility.dispose();
+    if (super.hasListeners) super.dispose();
   }
 
   //

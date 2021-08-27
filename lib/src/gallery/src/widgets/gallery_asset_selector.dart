@@ -63,32 +63,39 @@ class GalleryAssetSelectorState extends State<GalleryAssetSelector>
       curve: Curves.easeIn,
     ));
 
+    _checkShow();
+
     widget.controller.addListener(() {
       if (mounted) {
-        final entities = widget.controller.value.selectedEntities;
+        _checkShow();
+      }
+    });
+  }
 
-        if (!widget.controller.reachedMaximumLimit) {
-          if (entities.isEmpty && _selectOpaController.value == 1.0) {
-            _editOpaController.reverse();
-            _selectOpaController.reverse();
-          }
+  void _checkShow() {
+    final entities = widget.controller.value.selectedEntities;
 
-          if (entities.isNotEmpty) {
-            if (entities.length == 1) {
-              _editOpaController.forward();
-              _selectOpaController.forward();
-              _selectSizeController.reverse();
-            } else {
-              _editOpaController.reverse();
-              _selectSizeController.forward();
-              if (_selectOpaController.value == 0.0) {
-                _selectOpaController.forward();
-              }
-            }
+    if (widget.controller.value.selectedEntities.length <=
+        widget.controller.setting.maximum) {
+      if (entities.isEmpty && _selectOpaController.value == 1.0) {
+        _editOpaController.reverse();
+        _selectOpaController.reverse();
+      }
+
+      if (entities.isNotEmpty) {
+        if (entities.length == 1) {
+          _editOpaController.forward();
+          _selectOpaController.forward();
+          _selectSizeController.reverse();
+        } else {
+          _editOpaController.reverse();
+          _selectSizeController.forward();
+          if (_selectOpaController.value == 0.0) {
+            _selectOpaController.forward();
           }
         }
       }
-    });
+    }
   }
 
   @override
@@ -114,54 +121,8 @@ class GalleryAssetSelectorState extends State<GalleryAssetSelector>
           right: 0,
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                // Edit button
-
-                AnimatedContainer(
-                  width: value.selectedEntities.length == 1
-                      ? (size.width / 2) - 24
-                      : 0,
-                  duration: const Duration(milliseconds: 250),
-                  child: AnimatedBuilder(
-                    animation: _editOpa,
-                    builder: (context, child) {
-                      final hide = (value.selectedEntities.isEmpty &&
-                              !_editOpaController.isAnimating) ||
-                          _editOpa.value == 0.0;
-                      return hide
-                          ? const SizedBox()
-                          : Opacity(
-                              opacity: _editOpa.value,
-                              child: child,
-                            );
-                    },
-                    child: SizedBox(
-                      width: buttonWidth,
-                      child: _TextButton(
-                        onPressed: () =>
-                            widget.onEdit(value.selectedEntities.first),
-                        label: 'EDIT',
-                        background: Colors.white,
-                        labelColor: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Margin
-                AnimatedContainer(
-                  width: value.selectedEntities.length == 1 ? 16 : 0,
-                  duration: const Duration(milliseconds: 250),
-                ),
-
-                // Select
-                AnimatedContainer(
-                  width: value.selectedEntities.length == 1
-                      ? (size.width / 2) - 24
-                      : size.width - 32,
-                  duration: const Duration(milliseconds: 250),
-                  child: AnimatedBuilder(
+            child: widget.controller.setting.actionButton != null
+                ? AnimatedBuilder(
                     animation: _selectOpa,
                     builder: (context, child) {
                       final hide = (value.selectedEntities.isEmpty &&
@@ -175,26 +136,89 @@ class GalleryAssetSelectorState extends State<GalleryAssetSelector>
                               child: child,
                             );
                     },
-                    child: AnimatedBuilder(
-                      animation: _selectSize,
-                      builder: (context, child) {
-                        return SizedBox(
-                          width: buttonWidth +
-                              _selectSize.value * (buttonWidth + 20.0),
-                          child: child,
-                        );
-                      },
-                      child: _TextButton(
-                        onPressed: () => widget.onSubmit(context),
-                        label: 'SELECT',
-                      ),
-                    ),
-                  ),
-                ),
+                    child: widget.controller.setting.actionButton,
+                  )
+                : Row(
+                    children: [
+                      // Edit button
 
-                // Send Button
-              ],
-            ),
+                      AnimatedContainer(
+                        width: value.selectedEntities.length == 1
+                            ? (size.width / 2) - 24
+                            : 0,
+                        duration: const Duration(milliseconds: 250),
+                        child: AnimatedBuilder(
+                          animation: _editOpa,
+                          builder: (context, child) {
+                            final hide = (value.selectedEntities.isEmpty &&
+                                    !_editOpaController.isAnimating) ||
+                                _editOpa.value == 0.0;
+                            return hide
+                                ? const SizedBox()
+                                : Opacity(
+                                    opacity: _editOpa.value,
+                                    child: child,
+                                  );
+                          },
+                          child: SizedBox(
+                            width: buttonWidth,
+                            child: _TextButton(
+                              onPressed: () =>
+                                  widget.onEdit(value.selectedEntities.first),
+                              label: 'EDIT',
+                              background: Colors.white,
+                              labelColor: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Margin
+                      AnimatedContainer(
+                        width: value.selectedEntities.length == 1 ? 16 : 0,
+                        duration: const Duration(milliseconds: 250),
+                      ),
+
+                      // Select
+                      AnimatedContainer(
+                        width: value.selectedEntities.length == 1
+                            ? (size.width / 2) - 24
+                            : size.width - 32,
+                        duration: const Duration(milliseconds: 250),
+                        child: AnimatedBuilder(
+                          animation: _selectOpa,
+                          builder: (context, child) {
+                            final hide = (value.selectedEntities.isEmpty &&
+                                    !_selectOpaController.isAnimating) ||
+                                _selectOpa.value == 0.0;
+
+                            return hide
+                                ? const SizedBox()
+                                : Opacity(
+                                    opacity: _selectOpa.value,
+                                    child: child,
+                                  );
+                          },
+                          child: AnimatedBuilder(
+                            animation: _selectSize,
+                            builder: (context, child) {
+                              return SizedBox(
+                                width: buttonWidth +
+                                    _selectSize.value * (buttonWidth + 20.0),
+                                child: child,
+                              );
+                            },
+                            child: _TextButton(
+                              onPressed: () => widget.onSubmit(context),
+                              label: 'SELECT',
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Send Button
+                    ],
+                  ),
           ),
         );
       },

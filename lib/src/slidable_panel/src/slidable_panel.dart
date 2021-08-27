@@ -539,8 +539,8 @@ class PanelController extends ValueNotifier<SliderValue> {
 
   @override
   void dispose() {
-    _panelVisibility.dispose();
-    _scrollController.dispose();
+    if (_panelVisibility.hasListeners) _panelVisibility.dispose();
+    if (_scrollController.hasListeners) _scrollController.dispose();
     super.dispose();
   }
 
