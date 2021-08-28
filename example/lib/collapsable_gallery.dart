@@ -28,8 +28,14 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
         requestType: RequestType.all,
         actionButton: null,
       ),
-      panelSetting: PanelSetting(
-        background: Image.asset('../assets/bg.jpeg', fit: BoxFit.cover),
+      panelSetting: const PanelSetting(
+          // background: Image.asset('../assets/bg.jpeg', fit: BoxFit.cover),
+          ),
+      headerSetting: const HeaderSetting(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
       ),
     );
   }

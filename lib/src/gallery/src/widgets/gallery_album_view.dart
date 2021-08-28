@@ -70,27 +70,33 @@ class GalleryAlbumView extends StatelessWidget {
           );
         }
         // Album list
-        return ColoredBox(
-          color: controller.setting.albumColor ?? Colors.grey,
-          child: CupertinoScrollbar(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(top: 16).copyWith(
-                  bottom: MediaQuery.of(context).padding.bottom +
-                      MediaQuery.of(context).padding.top +
-                      controller.headerSetting.headerMaxHeight),
-              itemCount: state.data!.length,
-              itemBuilder: (context, index) {
-                final entity = state.data![index];
-                return _Album(
-                  panelSetting: controller.panelSetting,
-                  setting: controller.setting,
-                  entity: entity,
-                  onPressed: onAlbumChange,
-                  color: controller.setting.albumColor ?? Colors.grey,
-                );
-              },
+        return Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: controller.setting.albumBackground,
             ),
-          ),
+            CupertinoScrollbar(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(top: 16).copyWith(
+                    bottom: MediaQuery.of(context).padding.bottom +
+                        MediaQuery.of(context).padding.top +
+                        controller.headerSetting.headerMaxHeight),
+                itemCount: state.data!.length,
+                itemBuilder: (context, index) {
+                  final entity = state.data![index];
+                  return _Album(
+                    panelSetting: controller.panelSetting,
+                    setting: controller.setting,
+                    entity: entity,
+                    onPressed: onAlbumChange,
+                    color: controller.setting.albumColor,
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     );

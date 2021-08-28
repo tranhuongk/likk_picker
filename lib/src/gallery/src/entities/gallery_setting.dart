@@ -29,7 +29,8 @@ class GallerySetting {
     this.padding,
     this.space,
     this.itemBorderRadius,
-    this.albumColor,
+    this.albumBackground = const ColoredBox(color: Colors.black),
+    this.albumColor = Colors.grey,
     this.albumImageSize,
     this.albumBorderRadius,
     this.albumTitleStyle,
@@ -48,7 +49,10 @@ class GallerySetting {
   final BorderRadius? itemBorderRadius;
 
   ///
-  final Color? albumColor;
+  final Widget albumBackground;
+
+  ///
+  final Color albumColor;
 
   ///
   final int? albumImageSize;
@@ -154,6 +158,7 @@ class GallerySetting {
     EdgeInsets? padding,
     double? space,
     BorderRadius? itemBorderRadius,
+    Widget? albumBackground,
     Color? albumColor,
     int? albumImageSize,
     BorderRadius? albumBorderRadius,
@@ -190,6 +195,7 @@ class GallerySetting {
       padding: padding ?? this.padding,
       space: space ?? this.space,
       itemBorderRadius: itemBorderRadius ?? this.itemBorderRadius,
+      albumBackground: albumBackground ?? this.albumBackground,
       albumColor: albumColor ?? this.albumColor,
       albumImageSize: albumImageSize ?? this.albumImageSize,
       albumBorderRadius: albumBorderRadius ?? this.albumBorderRadius,

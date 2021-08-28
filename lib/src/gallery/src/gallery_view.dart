@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:likk_picker/likk_picker.dart';
 import 'package:likk_picker/src/animations/animations.dart';
 import 'package:likk_picker/src/camera/camera_view.dart';
 import 'package:likk_picker/src/playground/playground.dart';
@@ -32,8 +33,6 @@ import 'widgets/gallery_header.dart';
 // ignore: always_use_package_imports
 import 'widgets/gallery_recent_preview.dart';
 
-const _defaultMin = 0.37;
-
 ///
 ///
 ///
@@ -44,14 +43,14 @@ class GalleryViewWrapper extends StatefulWidget {
   const GalleryViewWrapper({
     Key? key,
     required this.child,
-    this.controller,
+    required this.controller,
   }) : super(key: key);
 
   ///
   final Widget child;
 
   ///
-  final GalleryController? controller;
+  final GalleryController controller;
 
   @override
   _GalleryViewWrapperState createState() => _GalleryViewWrapperState();
@@ -64,21 +63,23 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? GalleryController();
+    _controller = widget.controller;
     _panelController = _controller._panelController;
   }
 
   @override
   Widget build(BuildContext context) {
-    var ps = _controller.panelSetting;
-    var hs = _controller.headerSetting;
-    final _panelMaxHeight = ps.maxHeight ??
-        MediaQuery.of(context).size.height - (hs.topMargin ?? 0.0);
-    final _panelMinHeight = ps.minHeight ?? _panelMaxHeight * _defaultMin;
-    final _setting =
-        ps.copyWith(maxHeight: _panelMaxHeight, minHeight: _panelMinHeight);
+    if (MediaQuery.of(context).viewInsets.bottom != 0) {
+      kKeyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    }
+    final ps = _controller.panelSetting;
+    final hs = _controller.headerSetting;
+    final _panelMaxHeight =
+        ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+    final _panelMinHeight =
+        ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37;
 
-    final showPanel = MediaQuery.of(context).viewInsets.bottom == 0.0;
+    final showKeyboard = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
     return Material(
       key: _controller._wrapperKey,
@@ -93,11 +94,11 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
                 //
                 Expanded(
                   child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      final focusNode = FocusScope.of(context);
-                      if (focusNode.hasFocus) {
-                        focusNode.unfocus();
+                      final focusManager = FocusManager.instance.primaryFocus;
+                      if (focusManager!.hasFocus) {
+                        focusManager.unfocus();
                       }
                       if (_panelController.isVisible) {
                         _controller._closePanel();
@@ -112,7 +113,7 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
                   valueListenable: _panelController.panelVisibility,
                   builder: (context, isVisible, child) {
                     return SizedBox(
-                      height: showPanel && isVisible ? _panelMinHeight : 0.0,
+                      height: !showKeyboard && isVisible ? _panelMinHeight : 0,
                     );
                   },
                 ),
@@ -123,7 +124,7 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
 
             // Gallery
             SlidablePanel(
-              setting: _setting,
+              galleryController: _controller,
               controller: _panelController,
               child: Builder(
                 builder: (_) => GalleryView(controller: _controller),
@@ -185,7 +186,7 @@ class _GalleryViewState extends State<GalleryView>
   @override
   void initState() {
     super.initState();
-    _controller = (widget.controller ?? GalleryController());
+    _controller = widget.controller ?? GalleryController();
 
     _panelController = _controller._panelController;
 
@@ -258,11 +259,10 @@ class _GalleryViewState extends State<GalleryView>
       ),
       actions: [cancel, unselectItems],
       backgroundColor: Colors.grey.shade900,
-      actionsPadding: const EdgeInsets.all(0.0),
-      titlePadding: const EdgeInsets.all(16.0),
+      titlePadding: const EdgeInsets.all(16),
       contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 2.0,
+        horizontal: 16,
+        vertical: 2,
       ),
     );
 
@@ -313,11 +313,12 @@ class _GalleryViewState extends State<GalleryView>
 
   @override
   Widget build(BuildContext context) {
-    var ps = _controller.panelSetting;
-    var hs = _controller.headerSetting;
-    final _panelMaxHeight = ps.maxHeight ??
-        MediaQuery.of(context).size.height - (hs.topMargin ?? 0.0);
-    final _panelMinHeight = ps.minHeight ?? _panelMaxHeight * _defaultMin;
+    final ps = _controller.panelSetting;
+    final hs = _controller.headerSetting;
+    final _panelMaxHeight =
+        ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+    final _panelMinHeight =
+        ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37;
     final _setting =
         ps.copyWith(maxHeight: _panelMaxHeight, minHeight: _panelMinHeight);
     final _headerSetting = hs;
@@ -330,7 +331,7 @@ class _GalleryViewState extends State<GalleryView>
       child: WillPopScope(
         onWillPop: _onClosePressed,
         child: Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.transparent,
           body: Stack(
             // fit: StackFit.expand,
             children: [
@@ -363,15 +364,13 @@ class _GalleryViewState extends State<GalleryView>
                         valueListenable: _panelController,
                         builder: (context, SliderValue value, child) {
                           final height = (_headerSetting.headerMinHeight +
-                                  (_headerSetting.headerMaxHeight +
-                                          MediaQuery.of(context).padding.top -
+                                  (_headerSetting.headerMaxHeight -
                                           _headerSetting.headerMinHeight) *
                                       value.factor *
                                       1.2)
                               .clamp(
                             _headerSetting.headerMinHeight,
-                            _headerSetting.headerMaxHeight +
-                                MediaQuery.of(context).padding.top,
+                            _headerSetting.headerMaxHeight,
                           );
                           return SizedBox(height: height);
                         },
@@ -915,7 +914,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     if (_entitiesNotifier.hasListeners) _entitiesNotifier.dispose();
     if (_recentEntities.hasListeners) _recentEntities.dispose();
     if (_albumVisibility.hasListeners) _albumVisibility.dispose();
-    if (super.hasListeners) super.dispose();
+    super.dispose();
   }
 
   //

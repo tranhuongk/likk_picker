@@ -32,20 +32,32 @@ enum SlidingState {
 class HeaderSetting {
   ///
   const HeaderSetting({
-    this.topMargin,
+    this.topMargin = 70.0,
     this.headerMaxHeight = 56.0,
     this.headerMinHeight = 25.0,
-    this.headerBackground = const SizedBox(),
+    this.headerBackground = const ColoredBox(color: Colors.black),
     this.headerLeftWidget = Icons.close,
     this.headerRightWidget = const SizedBox(),
     this.albumBuilder,
     this.albumFit = FlexFit.loose,
     this.elevation = 0,
+    this.barSize = const Size(40, 5),
+    this.borderRadius = BorderRadius.zero,
   });
+
+  /// BorderRadius of header
+  /// Default: BorderRadius.zero
+  final BorderRadius borderRadius;
+
+  /// Default: BorderRadius.zero
+  final Size barSize;
 
   /// Margin for panel top. Which can be used to show status bar if you need
   /// to show panel above scaffold.
-  final double? topMargin;
+  /// Default: 70.0 px
+  final double topMargin;
+
+  /// Default: 0 px
   final double elevation;
 
   ///
@@ -88,6 +100,7 @@ class HeaderSetting {
     double? elevation,
     dynamic headerLeftWidget,
     Widget? headerRightWidget,
+    BorderRadius? borderRadius,
     Widget Function(BuildContext, BaseState<AssetPathEntity>, Widget?)?
         albumBuilder,
   }) {
@@ -100,6 +113,7 @@ class HeaderSetting {
       headerRightWidget: headerRightWidget ?? this.headerRightWidget,
       albumBuilder: albumBuilder ?? this.albumBuilder,
       elevation: elevation ?? this.elevation,
+      borderRadius: borderRadius ?? this.borderRadius,
     );
   }
 }
@@ -116,7 +130,7 @@ class PanelSetting {
     this.minHeight,
     this.maxHeight,
     this.snapingPoint = 0.4,
-    this.background = const SizedBox(),
+    this.background = const ColoredBox(color: Colors.black),
     this.overlayStyle = SystemUiOverlayStyle.dark,
   }) : assert(
           snapingPoint >= 0.0 && snapingPoint <= 1.0,
@@ -167,23 +181,19 @@ class SlidablePanel extends StatefulWidget {
   ///
   const SlidablePanel({
     Key? key,
-    this.controller,
-    this.setting,
-    this.headerSetting,
-    this.child,
+    required this.controller,
+    required this.galleryController,
+    required this.child,
   }) : super(key: key);
 
   ///
-  final PanelSetting? setting;
+  final GalleryController galleryController;
 
   ///
-  final HeaderSetting? headerSetting;
+  final Widget child;
 
   ///
-  final Widget? child;
-
-  ///
-  final PanelController? controller;
+  final PanelController controller;
 
   @override
   _SlidablePanelState createState() => _SlidablePanelState();
@@ -229,11 +239,11 @@ class _SlidablePanelState extends State<SlidablePanel>
   @override
   void initState() {
     super.initState();
-    _setting = widget.setting ?? const PanelSetting();
-    _headerSetting = widget.headerSetting ?? const HeaderSetting();
+    _setting = widget.galleryController.panelSetting;
+    _headerSetting = widget.galleryController.headerSetting;
 
     // Initialization of panel controller
-    _panelController = (widget.controller ?? PanelController()).._init(this);
+    _panelController = widget.controller.._init(this);
 
     _scrollController = _panelController.scrollController
       ..addListener(() {
@@ -284,6 +294,7 @@ class _SlidablePanelState extends State<SlidablePanel>
     if (!_scrollToBottom &&
         panelState == SlidingState.max &&
         state == SlidingState.slidingDown) {
+      // ignore: avoid_bool_literals_in_conditional_expressions
       final isControllerOffsetZero = _scrollController.hasClients
           ? _scrollController.offset == 0.0
           : false;
@@ -294,9 +305,8 @@ class _SlidablePanelState extends State<SlidablePanel>
       // _scrollToBottom = isHandler || isControllerOffsetZero;
 
       final headerMinPosition = _mediaQuery.size.height - _panelMaxHeight;
-      final headerMaxPosition = headerMinPosition +
-          _headerSetting.headerMaxHeight +
-          MediaQuery.of(context).padding.top;
+      final headerMaxPosition =
+          headerMinPosition + _headerSetting.headerMaxHeight;
       final isHandler = event.position.dy >= headerMinPosition &&
           event.position.dy <= headerMaxPosition;
       _scrollToBottom = isHandler || isControllerOffsetZero;
@@ -378,9 +388,9 @@ class _SlidablePanelState extends State<SlidablePanel>
       return const SizedBox();
     }
     _panelMaxHeight = _setting.maxHeight ??
-        _mediaQuery.size.height -
-            (_headerSetting.topMargin ?? _mediaQuery.padding.top);
-    _panelMinHeight = _setting.minHeight ?? _panelMaxHeight * 0.35;
+        _mediaQuery.size.height - _headerSetting.topMargin;
+    _panelMinHeight =
+        _setting.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37;
     _remainingSpace = _panelMaxHeight - _panelMinHeight;
 
     return ValueListenableBuilder<bool>(
@@ -409,7 +419,7 @@ class _SlidablePanelState extends State<SlidablePanel>
               onPointerDown: _onPointerDown,
               onPointerMove: _onPointerMove,
               onPointerUp: _onPointerUp,
-              child: widget.child ?? const SizedBox(),
+              child: widget.child,
             ),
           ),
 

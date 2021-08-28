@@ -54,54 +54,58 @@ class _GalleryHeaderState extends State<GalleryHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final panelSetting = _controller.panelSetting;
     final headerSetting = _controller.headerSetting;
 
-    return Container(
-      constraints: BoxConstraints(
-        minHeight: headerSetting.headerMinHeight,
-        maxHeight:
-            headerSetting.headerMaxHeight + MediaQuery.of(context).padding.top,
-      ),
-      child: Stack(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: headerSetting.headerBackground,
-          ),
-          Column(
-            children: [
-              // Handler
-              _Handler(controller: _controller),
+    return ClipRRect(
+      borderRadius: headerSetting.borderRadius,
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: headerSetting.headerMinHeight,
+          maxHeight: headerSetting.headerMaxHeight +
+              (_controller.fullScreenMode
+                  ? MediaQuery.of(context).padding.top
+                  : 0),
+        ),
+        child: Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: headerSetting.headerBackground,
+            ),
+            Column(
+              children: [
+                // Handler
+                _Handler(controller: _controller),
 
-              // Details and controls
-              Expanded(
-                child: Row(
-                  children: [
-                    const SizedBox(width: 5),
-                    // Close icon
-                    _IconButton(
-                      icon: _controller.headerSetting.headerLeftWidget,
-                      onPressed: widget.onClose,
-                    ),
-                    Flexible(
-                      fit: _controller.headerSetting.albumFit,
-                      child: _AnimatedDropdown(
-                        controller: _controller,
-                        onPressed: widget.onAlbumToggle,
-                        albumVisibility: widget.albumVisibility,
-                        albumNotifier: widget.albumNotifier,
-                        builder: _controller.headerSetting.albumBuilder,
+                // Details and controls
+                Expanded(
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 5),
+                      // Close icon
+                      _IconButton(
+                        icon: _controller.headerSetting.headerLeftWidget,
+                        onPressed: widget.onClose,
                       ),
-                    ),
-                    _controller.headerSetting.headerRightWidget,
-                  ],
+                      Flexible(
+                        fit: _controller.headerSetting.albumFit,
+                        child: _AnimatedDropdown(
+                          controller: _controller,
+                          onPressed: widget.onAlbumToggle,
+                          albumVisibility: widget.albumVisibility,
+                          albumNotifier: widget.albumNotifier,
+                          builder: _controller.headerSetting.albumBuilder,
+                        ),
+                      ),
+                      _controller.headerSetting.headerRightWidget,
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -262,8 +266,8 @@ class _Handler extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: Container(
-            width: 40,
-            height: 5,
+            width: controller.headerSetting.barSize.width,
+            height: controller.headerSetting.barSize.height,
             color: Colors.grey.shade700,
           ),
         ),

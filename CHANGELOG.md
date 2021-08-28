@@ -1,6 +1,11 @@
+## [1.0.5] - 27/08/2021
+* GallerySetting: Add `albumBackground` for set background of album
+* HeaderSetting:  Add `barSize` for setting size of header bar
+* Fix size of header and panel
+
 ## [1.0.4] - 27/08/2021
 * Fix bug show action button
-* Add `cameraItemWidget` for GallerySetting for custom camera widget
+* GallerySetting: Add `cameraItemWidget` for custom camera widget
 * Fix bug call Function `completeTask`
 
 ## [1.0.3] - 27/08/2021
