@@ -27,6 +27,7 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
         maximum: 2,
         requestType: RequestType.all,
         actionButton: null,
+        albumTitleStyle: TextStyle(fontSize: 16),
       ),
       panelSetting: const PanelSetting(
           // background: Image.asset('../assets/bg.jpeg', fit: BoxFit.cover),
@@ -51,91 +52,94 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
   Widget build(BuildContext context) {
     return GalleryViewWrapper(
       controller: controller,
-      child: Scaffold(
-        backgroundColor: Colors.amber,
-        appBar: AppBar(
-          title: const Text('Pick using picker view'),
-        ),
-        body: Column(
-          children: [
-            // Grid view
-            Expanded(child: GridViewWidget(notifier: notifier)),
+      safeAreaBottom: true,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.amber,
+          appBar: AppBar(
+            title: const Text('Pick using picker view'),
+          ),
+          body: Column(
+            children: [
+              // Grid view
+              Expanded(child: GridViewWidget(notifier: notifier)),
 
-            //
-            Builder(builder: (context) {
-              return TextButton(
-                onPressed: () async {
-                  final entities = await controller.pick(
-                    context,
-                    selectedEntities: notifier.value,
-                  );
-                  notifier.value = entities;
-                },
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.green,
-                ),
-                child: const Text('Use Controller'),
-              );
-            }),
+              //
+              Builder(builder: (context) {
+                return TextButton(
+                  onPressed: () async {
+                    final entities = await controller.pick(
+                      context,
+                      selectedEntities: notifier.value,
+                    );
+                    notifier.value = entities;
+                  },
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.green,
+                  ),
+                  child: const Text('Use Controller'),
+                );
+              }),
 
-            // Textfield
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  // Textfield
-                  const Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Test field',
+              // Textfield
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    // Textfield
+                    const Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Test field',
+                        ),
                       ),
                     ),
-                  ),
 
-                  // Camera field..
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CameraViewField(
-                      onCapture: (entity) {
-                        notifier.value = [...notifier.value, entity];
-                      },
-                      child: const Icon(Icons.camera),
+                    // Camera field..
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CameraViewField(
+                        onCapture: (entity) {
+                          notifier.value = [...notifier.value, entity];
+                        },
+                        child: const Icon(Icons.camera),
+                      ),
                     ),
-                  ),
 
-                  // Gallery field
-                  ValueListenableBuilder<List<LikkEntity>>(
-                    valueListenable: notifier,
-                    builder: (context, list, child) {
-                      return GalleryViewField(
-                        controller: controller,
-                        selectedEntities: list,
-                        onChanged: (entity, isRemoved) {
-                          final value = notifier.value.toList();
-                          if (isRemoved) {
-                            value.remove(entity);
-                          } else {
-                            value.add(entity);
-                          }
-                          notifier.value = value;
-                        },
-                        onSubmitted: (list) {
-                          notifier.value = list;
-                        },
-                        child: child,
-                      );
-                    },
-                    child: const Icon(Icons.photo),
-                  ),
+                    // Gallery field
+                    ValueListenableBuilder<List<LikkEntity>>(
+                      valueListenable: notifier,
+                      builder: (context, list, child) {
+                        return GalleryViewField(
+                          controller: controller,
+                          selectedEntities: list,
+                          onChanged: (entity, isRemoved) {
+                            final value = notifier.value.toList();
+                            if (isRemoved) {
+                              value.remove(entity);
+                            } else {
+                              value.add(entity);
+                            }
+                            notifier.value = value;
+                          },
+                          onSubmitted: (list) {
+                            notifier.value = list;
+                          },
+                          child: child,
+                        );
+                      },
+                      child: const Icon(Icons.photo),
+                    ),
 
-                  //
-                ],
+                    //
+                  ],
+                ),
               ),
-            ),
 
-            //
-          ],
+              //
+            ],
+          ),
         ),
       ),
     );

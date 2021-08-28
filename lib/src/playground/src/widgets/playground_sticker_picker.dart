@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:likk_picker/src/animations/animations.dart';
 import 'package:likk_picker/src/sticker_booth/sticker_booth.dart';
 import 'package:flutter/material.dart';
@@ -246,18 +247,20 @@ class StickersTabBarView extends StatelessWidget {
       mainAxisSpacing: 24,
       crossAxisSpacing: 24,
     );
-    return GridView.builder(
-      key: PageStorageKey<String>('$key'),
-      gridDelegate: gridDelegate,
-      padding: const EdgeInsets.all(24),
-      itemCount: stickers.length,
-      itemBuilder: (context, index) {
-        final sticker = stickers.elementAt(index);
-        return StickerChoice(
-          sticker: sticker,
-          onPressed: () => onStickerSelected(sticker),
-        );
-      },
+    return CupertinoScrollbar(
+      child: GridView.builder(
+        key: PageStorageKey<String>('$key'),
+        gridDelegate: gridDelegate,
+        padding: const EdgeInsets.all(24),
+        itemCount: stickers.length,
+        itemBuilder: (context, index) {
+          final sticker = stickers.elementAt(index);
+          return StickerChoice(
+            sticker: sticker,
+            onPressed: () => onStickerSelected(sticker),
+          );
+        },
+      ),
     );
   }
 }

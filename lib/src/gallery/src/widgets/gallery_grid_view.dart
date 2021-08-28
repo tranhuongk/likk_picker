@@ -82,54 +82,58 @@ class GalleryGridView extends StatelessWidget {
                       ? entities.length + 1
                       : entities.length;
 
-              return GridView.builder(
+              return CupertinoScrollbar(
                 controller: panelController.scrollController,
-                padding: (controller.setting.padding ?? const EdgeInsets.all(8))
-                    .add(EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom,
-                )),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: controller.setting.crossAxisCount ?? 3,
-                  crossAxisSpacing: controller.setting.space ?? 1.5,
-                  mainAxisSpacing: controller.setting.space ?? 1.5,
-                ),
-                itemCount: itemCount,
-                itemBuilder: (context, index) {
-                  if (controller.setting.enableCamera && index == 0) {
+                child: GridView.builder(
+                  controller: panelController.scrollController,
+                  padding:
+                      (controller.setting.padding ?? const EdgeInsets.all(8))
+                          .add(EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom,
+                  )),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: controller.setting.crossAxisCount ?? 3,
+                    crossAxisSpacing: controller.setting.space ?? 1.5,
+                    mainAxisSpacing: controller.setting.space ?? 1.5,
+                  ),
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) {
+                    if (controller.setting.enableCamera && index == 0) {
+                      return ClipRRect(
+                        borderRadius: controller.setting.itemBorderRadius ??
+                            BorderRadius.circular(8),
+                        child: GestureDetector(
+                          onTap: () => onCameraRequest(context),
+                          child: controller.setting.cameraItemWidget ??
+                              const ColoredBox(
+                                color: Colors.black,
+                                child: Icon(
+                                  CupertinoIcons.photo_camera_solid,
+                                  color: Colors.white,
+                                ),
+                              ),
+                        ),
+                      );
+                    }
+
+                    final ind =
+                        controller.setting.enableCamera ? index - 1 : index;
+
+                    final entity = state.isLoading ? null : entities[ind];
+
                     return ClipRRect(
                       borderRadius: controller.setting.itemBorderRadius ??
                           BorderRadius.circular(8),
-                      child: GestureDetector(
-                        onTap: () => onCameraRequest(context),
-                        child: controller.setting.cameraItemWidget ??
-                            const ColoredBox(
-                              color: Colors.black,
-                              child: Icon(
-                                CupertinoIcons.photo_camera_solid,
-                                color: Colors.white,
-                              ),
-                            ),
+                      child: _MediaTile(
+                        controller: controller,
+                        entity: entity,
+                        onPressed: (entity) {
+                          onSelect(entity, context);
+                        },
                       ),
                     );
-                  }
-
-                  final ind =
-                      controller.setting.enableCamera ? index - 1 : index;
-
-                  final entity = state.isLoading ? null : entities[ind];
-
-                  return ClipRRect(
-                    borderRadius: controller.setting.itemBorderRadius ??
-                        BorderRadius.circular(8),
-                    child: _MediaTile(
-                      controller: controller,
-                      entity: entity,
-                      onPressed: (entity) {
-                        onSelect(entity, context);
-                      },
-                    ),
-                  );
-                },
+                  },
+                ),
               );
 
               //

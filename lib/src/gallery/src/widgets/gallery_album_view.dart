@@ -79,7 +79,7 @@ class GalleryAlbumView extends StatelessWidget {
             ),
             CupertinoScrollbar(
               child: ListView.builder(
-                padding: const EdgeInsets.only(top: 16).copyWith(
+                padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).padding.bottom +
                         MediaQuery.of(context).padding.top +
                         controller.headerSetting.headerMaxHeight),
@@ -123,13 +123,13 @@ class _Album extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
     final int imageSize = setting.albumImageSize ?? 48;
-    return GestureDetector(
-      onTap: () {
-        onPressed?.call(entity);
-      },
-      child: Container(
-        padding: const EdgeInsets.only(left: 16.0, bottom: 20.0, right: 16.0),
-        color: color,
+    return ColoredBox(
+      color: color,
+      child: CupertinoButton(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        onPressed: () {
+          onPressed?.call(entity);
+        },
         child: Row(
           children: [
             // Image

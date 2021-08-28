@@ -44,10 +44,14 @@ class GalleryViewWrapper extends StatefulWidget {
     Key? key,
     required this.child,
     required this.controller,
+    this.safeAreaBottom = false,
   }) : super(key: key);
 
   ///
   final Widget child;
+
+  ///
+  final bool safeAreaBottom;
 
   ///
   final GalleryController controller;
@@ -77,7 +81,8 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
     final _panelMaxHeight =
         ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
     final _panelMinHeight =
-        ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37;
+        (ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37) -
+            (widget.safeAreaBottom ? MediaQuery.of(context).padding.bottom : 0);
 
     final showKeyboard = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
@@ -414,7 +419,9 @@ class _GalleryViewState extends State<GalleryView>
                 animation: _animation,
                 builder: (context, child) {
                   final offsetY = _headerSetting.headerMaxHeight +
-                      MediaQuery.of(context).padding.top +
+                      (_controller.fullScreenMode
+                          ? MediaQuery.of(context).padding.top
+                          : 0) +
                       (_panelMaxHeight - hs.headerMaxHeight) *
                           (1 - _animation.value);
                   return Visibility(
