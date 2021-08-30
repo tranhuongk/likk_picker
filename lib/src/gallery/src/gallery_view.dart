@@ -78,11 +78,9 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
     }
     final ps = _controller.panelSetting;
     final hs = _controller.headerSetting;
-    final _panelMaxHeight =
-        ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
-    final _panelMinHeight =
-        (ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37) -
-            (widget.safeAreaBottom ? MediaQuery.of(context).padding.bottom : 0);
+    final _panelMaxHeight = ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+    final _panelMinHeight = (ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37) -
+        (widget.safeAreaBottom ? MediaQuery.of(context).padding.bottom : 0);
 
     final showKeyboard = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
@@ -178,8 +176,7 @@ class GalleryView extends StatefulWidget {
   _GalleryViewState createState() => _GalleryViewState();
 }
 
-class _GalleryViewState extends State<GalleryView>
-    with SingleTickerProviderStateMixin {
+class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStateMixin {
   late final GalleryController _controller;
   late final PanelController _panelController;
 
@@ -285,7 +282,8 @@ class _GalleryViewState extends State<GalleryView>
       return false;
     }
 
-    if (_controller.value.selectedEntities.isNotEmpty) {
+    if (_controller.value.selectedEntities.isNotEmpty &&
+        (_controller.setting.onUnselectAll == null || _controller.setting.onUnselectAll!())) {
       _showAlert(_controller.setting);
       return false;
     }
@@ -320,12 +318,9 @@ class _GalleryViewState extends State<GalleryView>
   Widget build(BuildContext context) {
     final ps = _controller.panelSetting;
     final hs = _controller.headerSetting;
-    final _panelMaxHeight =
-        ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
-    final _panelMinHeight =
-        ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37;
-    final _setting =
-        ps.copyWith(maxHeight: _panelMaxHeight, minHeight: _panelMinHeight);
+    final _panelMaxHeight = ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+    final _panelMinHeight = ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37;
+    final _setting = ps.copyWith(maxHeight: _panelMaxHeight, minHeight: _panelMinHeight);
     final _headerSetting = hs;
 
     final albumListHeight = _panelMaxHeight - hs.headerMaxHeight;
@@ -360,8 +355,7 @@ class _GalleryViewState extends State<GalleryView>
                     builder: (context) {
                       if (_controller.fullScreenMode) {
                         return SizedBox(
-                          height: _headerSetting.headerMaxHeight +
-                              MediaQuery.of(context).padding.top,
+                          height: _headerSetting.headerMaxHeight + MediaQuery.of(context).padding.top,
                         );
                       }
 
@@ -369,10 +363,7 @@ class _GalleryViewState extends State<GalleryView>
                         valueListenable: _panelController,
                         builder: (context, SliderValue value, child) {
                           final height = (_headerSetting.headerMinHeight +
-                                  (_headerSetting.headerMaxHeight -
-                                          _headerSetting.headerMinHeight) *
-                                      value.factor *
-                                      1.2)
+                                  (_headerSetting.headerMaxHeight - _headerSetting.headerMinHeight) * value.factor * 1.2)
                               .clamp(
                             _headerSetting.headerMinHeight,
                             _headerSetting.headerMaxHeight,
@@ -419,11 +410,8 @@ class _GalleryViewState extends State<GalleryView>
                 animation: _animation,
                 builder: (context, child) {
                   final offsetY = _headerSetting.headerMaxHeight +
-                      (_controller.fullScreenMode
-                          ? MediaQuery.of(context).padding.top
-                          : 0) +
-                      (_panelMaxHeight - hs.headerMaxHeight) *
-                          (1 - _animation.value);
+                      (_controller.fullScreenMode ? MediaQuery.of(context).padding.top : 0) +
+                      (_panelMaxHeight - hs.headerMaxHeight) * (1 - _animation.value);
                   return Visibility(
                     visible: _animation.value > 0.0,
                     child: Transform.translate(
@@ -568,8 +556,7 @@ class _GalleryViewFieldState extends State<GalleryViewField> {
           context,
         );
       },
-      child: widget.previewBuilder != null &&
-              (_controller.recentEntities?.isNotEmpty ?? false)
+      child: widget.previewBuilder != null && (_controller.recentEntities?.isNotEmpty ?? false)
           ? GalleryRecentPreview(
               entity: _controller.recentEntities!.first,
               builder: widget.previewBuilder,
@@ -675,11 +662,30 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// Clear selected entities
-  void clearSelection() {
+  void clearSelection([List<LikkEntity>? list]) {
+    if (list == null) {
+      _onSubmitted?.call([]);
+      _clearedSelection = true;
+      _internal = true;
+      value = const GalleryValue();
+      return;
+    }
+    final _afterRemove = value.selectedEntities..removeWhere((element) => list.contains(element));
+    if (_afterRemove.isEmpty) {
+      _onSubmitted?.call([]);
+      _clearedSelection = true;
+      _internal = true;
+      value = const GalleryValue();
+      return;
+    }
+
     _onSubmitted?.call([]);
-    _clearedSelection = true;
+    _clearedSelection = false;
     _internal = true;
-    value = const GalleryValue();
+    value = value.copyWith(
+      selectedEntities: _afterRemove,
+      previousSelection: false,
+    );
   }
 
   /// Selecting and unselecting entities
@@ -743,9 +749,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   /// When panel closed without any selection
   void _closePanel() {
     _panelController.closePanel();
-    final entities = (_clearedSelection || value.selectedEntities.isEmpty)
-        ? <LikkEntity>[]
-        : value.selectedEntities;
+    final entities = (_clearedSelection || value.selectedEntities.isEmpty) ? <LikkEntity>[] : value.selectedEntities;
     _completer.complete(entities);
     // _onSubmitted?.call(entities);
     // _checkKeyboard.value = false;
@@ -847,8 +851,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }) async {
     // If dont have permission dont do anything
     final permission = await PhotoManager.requestPermissionExtend();
-    if (permission != PermissionState.authorized &&
-        permission != PermissionState.limited) {
+    if (permission != PermissionState.authorized && permission != PermissionState.limited) {
       PhotoManager.openSetting();
       return [];
     }
@@ -897,8 +900,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   ///
   /// return true if selected media reached to maximum selection limit
   ///
-  bool get reachedMaximumLimit =>
-      value.selectedEntities.length == setting.maximum;
+  bool get reachedMaximumLimit => value.selectedEntities.length == setting.maximum;
 
   ///
   /// return true is gallery is in single selection mode

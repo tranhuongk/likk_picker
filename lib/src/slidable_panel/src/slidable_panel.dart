@@ -144,7 +144,7 @@ class PanelSetting {
   final double? maxHeight;
 
   /// Panel minimum height
-  /// Default: 35% of [maxHeight]
+  /// Default: 37% of [maxHeight]
   final double? minHeight;
 
   /// Point from where panel will start fling animation to snap it's height
