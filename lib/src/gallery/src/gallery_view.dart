@@ -600,7 +600,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       albumNotifier: _albumNotifier,
       entitiesNotifier: _entitiesNotifier,
       recentEntitiesNotifier: _recentEntities,
-    )..fetchAlbums(setting.requestType);
+    );
   }
 
   /// Panel setting
@@ -859,6 +859,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       return [];
     }
 
+    _repository.fetchAlbums(setting.requestType);
     _completer = Completer<List<LikkEntity>>();
 
     if (_wrapperKey.currentState == null) {
