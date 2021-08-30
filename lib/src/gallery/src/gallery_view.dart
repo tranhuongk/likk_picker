@@ -325,112 +325,115 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
 
     final albumListHeight = _panelMaxHeight - hs.headerMaxHeight;
     albumHeight = albumListHeight;
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    final body = Stack(
+      // fit: StackFit.expand,
+      children: [
+        // Header
+        Align(
+          alignment: Alignment.topCenter,
+          child: GalleryHeader(
+            controller: _controller,
+            albumNotifier: _controller._albumNotifier,
+            onClose: _onClosePressed,
+            onAlbumToggle: _toogleAlbumList,
+            albumVisibility: _controller._albumVisibility,
+          ),
+        ),
 
+        // Body
+        Column(
+          children: [
+            // Header space
+            Builder(
+              builder: (context) {
+                if (_controller.fullScreenMode) {
+                  return SizedBox(
+                    height: _headerSetting.headerMaxHeight + MediaQuery.of(context).padding.top,
+                  );
+                }
+
+                return ValueListenableBuilder<SliderValue>(
+                  valueListenable: _panelController,
+                  builder: (context, SliderValue value, child) {
+                    final height = (_headerSetting.headerMinHeight +
+                            (_headerSetting.headerMaxHeight - _headerSetting.headerMinHeight) * value.factor * 1.2)
+                        .clamp(
+                      _headerSetting.headerMinHeight,
+                      _headerSetting.headerMaxHeight,
+                    );
+                    return SizedBox(height: height);
+                  },
+                );
+              },
+            ),
+
+            if (_controller.headerSetting.elevation != 0)
+              // Divider
+              Divider(
+                color: Colors.black,
+                thickness: 0,
+                height: _controller.headerSetting.elevation,
+              ),
+
+            // Gallery grid
+            Expanded(
+              child: GalleryGridView(
+                controller: _controller,
+                entitiesNotifier: _controller._entitiesNotifier,
+                panelController: _controller._panelController,
+                onCameraRequest: _controller.openCamera,
+                onSelect: _controller._select,
+              ),
+            ),
+          ],
+        ),
+
+        // Send and edit button
+
+        GalleryAssetSelector(
+          controller: _controller,
+          onEdit: (e) {
+            _controller._openPlayground(context, e);
+          },
+          onSubmit: _controller.completeTask,
+        ),
+
+        // Album list
+        AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            final offsetY = _headerSetting.headerMaxHeight +
+                (_controller.fullScreenMode ? MediaQuery.of(context).padding.top : 0) +
+                (_panelMaxHeight - hs.headerMaxHeight) * (1 - _animation.value);
+            return Visibility(
+              visible: _animation.value > 0.0,
+              child: Transform.translate(
+                offset: Offset(0.0, offsetY),
+                child: child,
+              ),
+            );
+          },
+          child: GalleryAlbumView(
+            albumsNotifier: _controller._albumsNotifier,
+            controller: _controller,
+            onAlbumChange: _onALbumChange,
+          ),
+        ),
+
+        //
+      ],
+    );
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: _setting.overlayStyle,
       child: WillPopScope(
         onWillPop: _onClosePressed,
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Stack(
-            // fit: StackFit.expand,
-            children: [
-              // Header
-              Align(
-                alignment: Alignment.topCenter,
-                child: GalleryHeader(
-                  controller: _controller,
-                  albumNotifier: _controller._albumNotifier,
-                  onClose: _onClosePressed,
-                  onAlbumToggle: _toogleAlbumList,
-                  albumVisibility: _controller._albumVisibility,
-                ),
-              ),
-
-              // Body
-              Column(
-                children: [
-                  // Header space
-                  Builder(
-                    builder: (context) {
-                      if (_controller.fullScreenMode) {
-                        return SizedBox(
-                          height: _headerSetting.headerMaxHeight + MediaQuery.of(context).padding.top,
-                        );
-                      }
-
-                      return ValueListenableBuilder<SliderValue>(
-                        valueListenable: _panelController,
-                        builder: (context, SliderValue value, child) {
-                          final height = (_headerSetting.headerMinHeight +
-                                  (_headerSetting.headerMaxHeight - _headerSetting.headerMinHeight) * value.factor * 1.2)
-                              .clamp(
-                            _headerSetting.headerMinHeight,
-                            _headerSetting.headerMaxHeight,
-                          );
-                          return SizedBox(height: height);
-                        },
-                      );
-                    },
-                  ),
-
-                  if (_controller.headerSetting.elevation != 0)
-                    // Divider
-                    Divider(
-                      color: Colors.black,
-                      thickness: 0,
-                      height: _controller.headerSetting.elevation,
-                    ),
-
-                  // Gallery grid
-                  Expanded(
-                    child: GalleryGridView(
-                      controller: _controller,
-                      entitiesNotifier: _controller._entitiesNotifier,
-                      panelController: _controller._panelController,
-                      onCameraRequest: _controller.openCamera,
-                      onSelect: _controller._select,
-                    ),
-                  ),
-                ],
-              ),
-
-              // Send and edit button
-
-              GalleryAssetSelector(
-                controller: _controller,
-                onEdit: (e) {
-                  _controller._openPlayground(context, e);
-                },
-                onSubmit: _controller.completeTask,
-              ),
-
-              // Album list
-              AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  final offsetY = _headerSetting.headerMaxHeight +
-                      (_controller.fullScreenMode ? MediaQuery.of(context).padding.top : 0) +
-                      (_panelMaxHeight - hs.headerMaxHeight) * (1 - _animation.value);
-                  return Visibility(
-                    visible: _animation.value > 0.0,
-                    child: Transform.translate(
-                      offset: Offset(0.0, offsetY),
-                      child: child,
-                    ),
-                  );
-                },
-                child: GalleryAlbumView(
-                  albumsNotifier: _controller._albumsNotifier,
-                  controller: _controller,
-                  onAlbumChange: _onALbumChange,
-                ),
-              ),
-
-              //
-            ],
-          ),
-        ),
+        child: _controller.fullScreenMode
+            ? Scaffold(
+                backgroundColor: Colors.transparent,
+                body: body,
+              )
+            : body,
       ),
     );
   }
