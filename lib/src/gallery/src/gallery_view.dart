@@ -689,17 +689,14 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     }
     final _afterRemove = value.selectedEntities
       ..removeWhere((element) => list.contains(element));
+    _onSubmitted?.call(_afterRemove);
+    _clearedSelection = false;
+    _internal = true;
     if (_afterRemove.isEmpty) {
-      _onSubmitted?.call([]);
-      _clearedSelection = true;
-      _internal = true;
       value = const GalleryValue();
       return;
     }
 
-    _onSubmitted?.call([]);
-    _clearedSelection = false;
-    _internal = true;
     value = value.copyWith(
       selectedEntities: _afterRemove,
       previousSelection: false,
@@ -762,6 +759,15 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     _completer.complete(value.selectedEntities);
     // _internal = true;
     // value = const GalleryValue();
+  }
+
+  void close() {
+    if (_fullScreenMode) {
+      Navigator.of(context).pop();
+    } else {
+      _panelController.closePanel();
+      // _checkKeyboard.value = false;
+    }
   }
 
   /// When panel closed without any selection
