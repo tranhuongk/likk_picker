@@ -761,12 +761,14 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     // value = const GalleryValue();
   }
 
-  void close() {
-    if (_fullScreenMode) {
-      Navigator.of(context).pop();
-    } else {
+  /// close panel or page
+  void close([BuildContext? context]) {
+    if (!_fullScreenMode) {
       _panelController.closePanel();
-      // _checkKeyboard.value = false;
+      return;
+    }
+    if (context != null) {
+      Navigator.of(context).pop();
     }
   }
 
