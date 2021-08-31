@@ -1,3 +1,8 @@
+## [1.0.7] - 31/08/2021
+* Update permission when open screen which have GalleryController
+* Update unSelect with list item
+* Update onUnSelect = false -> will pop 
+
 ## [1.0.6] - 27/08/2021
 * GalleryViewWrapper: Add `safeAreaBottom` for check item if have use SafeArea widget on bottom
 * Fix padding of album and album item
