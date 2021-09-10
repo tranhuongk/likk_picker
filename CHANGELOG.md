@@ -1,3 +1,7 @@
+## [1.0.7+1] - 31/08/2021
+* Update GalleryController `close` to close panel
+* Fix clear selection return empty
+
 ## [1.0.7] - 31/08/2021
 * Update permission when open screen which have GalleryController
 * Update unSelect with list item
