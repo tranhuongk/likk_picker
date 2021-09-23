@@ -131,7 +131,6 @@ class PanelSetting {
     this.maxHeight,
     this.snapingPoint = 0.4,
     this.background = const ColoredBox(color: Colors.black),
-    this.overlayStyle = SystemUiOverlayStyle.dark,
   }) : assert(
           snapingPoint >= 0.0 && snapingPoint <= 1.0,
           '[snapingPoint] value must be between 1.0 and 0.0',
@@ -156,9 +155,6 @@ class PanelSetting {
   /// Background widget for panel,
   /// Default: [Sizebox()]
   final Widget background;
-
-  ///
-  final SystemUiOverlayStyle overlayStyle;
 
   /// Helper function
   PanelSetting copyWith({

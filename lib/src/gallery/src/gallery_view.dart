@@ -324,15 +324,11 @@ class _GalleryViewState extends State<GalleryView>
     final hs = _controller.headerSetting;
     final _panelMaxHeight =
         ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
-    final _panelMinHeight =
-        ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37;
-    final _setting =
-        ps.copyWith(maxHeight: _panelMaxHeight, minHeight: _panelMinHeight);
     final _headerSetting = hs;
 
     final albumListHeight = _panelMaxHeight - hs.headerMaxHeight;
     albumHeight = albumListHeight;
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+
     final body = Stack(
       // fit: StackFit.expand,
       children: [
@@ -437,17 +433,14 @@ class _GalleryViewState extends State<GalleryView>
         //
       ],
     );
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: _setting.overlayStyle,
-      child: WillPopScope(
-        onWillPop: _onClosePressed,
-        child: _controller.fullScreenMode
-            ? Scaffold(
-                backgroundColor: Colors.transparent,
-                body: body,
-              )
-            : body,
-      ),
+    return WillPopScope(
+      onWillPop: _onClosePressed,
+      child: _controller.fullScreenMode
+          ? Scaffold(
+              backgroundColor: Colors.transparent,
+              body: body,
+            )
+          : body,
     );
   }
 }

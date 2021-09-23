@@ -1,3 +1,6 @@
+## [1.0.8] - 23/09/2021
+* Fix status bar
+
 ## [1.0.7+1] - 31/08/2021
 * Update GalleryController `close` to close panel
 * Fix clear selection return empty
