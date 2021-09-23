@@ -1,3 +1,6 @@
+## [1.0.8+1] - 23/09/2021
+* Back version camera, photo_manager
+
 ## [1.0.8] - 23/09/2021
 * Fix status bar
 
