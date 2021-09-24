@@ -73,13 +73,16 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.of(context).viewInsets.bottom != 0) {
-      kKeyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    }
     final ps = _controller.panelSetting;
     final hs = _controller.headerSetting;
     final _panelMaxHeight =
         ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+
+    if (MediaQuery.of(context).viewInsets.bottom != 0 &&
+        MediaQuery.of(context).viewInsets.bottom > (_panelMaxHeight * 0.37)) {
+      kKeyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    }
+
     final _panelMinHeight =
         (ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37) -
             (widget.safeAreaBottom ? MediaQuery.of(context).padding.bottom : 0);
@@ -895,15 +898,15 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     } else {
       _fullScreenMode = false;
       _panelController.openPanel();
-      FocusScope.of(context).unfocus();
+      FocusManager.instance.primaryFocus?.unfocus();
     }
-    // if (!singleSelection && (selectedEntities?.isNotEmpty ?? false)) {
-    //   _internal = true;
-    //   value = value.copyWith(
-    //     selectedEntities: selectedEntities,
-    //     previousSelection: true,
-    //   );
-    // }
+    if (!singleSelection && (selectedEntities?.isNotEmpty ?? false)) {
+      _internal = true;
+      value = value.copyWith(
+        selectedEntities: selectedEntities,
+        previousSelection: true,
+      );
+    }
 
     return _completer.future;
   }

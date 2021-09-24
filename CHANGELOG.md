@@ -1,3 +1,7 @@
+## [1.0.9] - 23/09/2021
+* Fix height panel
+* Fix keyboard show, selected item is cleared
+
 ## [1.0.8+1] - 23/09/2021
 * Back version camera, photo_manager
 
