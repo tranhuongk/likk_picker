@@ -13,7 +13,7 @@ class GallerySetting {
     this.maximum = 20,
     this.enableCamera = true,
     this.crossAxisCount,
-    this.onUnselectAll,
+    this.backAndUnselect,
     this.onItemClick,
     this.onReachedMaximumLimit,
     this.selectionCountAlignment = Alignment.center,
@@ -98,7 +98,7 @@ class GallerySetting {
   /// return true is unselect,
   /// false is cancel
   ///
-  final bool Function()? onUnselectAll;
+  final bool Function()? backAndUnselect;
 
   ///
   /// On select item callback
@@ -144,7 +144,7 @@ class GallerySetting {
     int? maximum,
     bool? enableCamera,
     int? crossAxisCount,
-    bool Function()? onUnselectAll,
+    bool Function()? backAndUnselect,
     Function(LikkEntity, List<LikkEntity>)? onItemClick,
     Widget? actionButton,
     Alignment? selectionCountAlignment,
@@ -171,7 +171,7 @@ class GallerySetting {
       maximum: maximum ?? this.maximum,
       enableCamera: enableCamera ?? this.enableCamera,
       crossAxisCount: crossAxisCount ?? this.crossAxisCount,
-      onUnselectAll: onUnselectAll ?? this.onUnselectAll,
+      backAndUnselect: backAndUnselect ?? this.backAndUnselect,
       onItemClick: onItemClick ?? this.onItemClick,
       onReachedMaximumLimit:
           onReachedMaximumLimit ?? this.onReachedMaximumLimit,

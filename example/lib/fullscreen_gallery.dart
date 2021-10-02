@@ -31,7 +31,7 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
           onItemClick: (item, list) {},
           enableCamera: true,
           crossAxisCount: 4,
-          onUnselectAll: () => false,
+          backAndUnselect: () => false,
           onReachedMaximumLimit: () {},
           selectionCountAlignment: Alignment.topRight,
           selectionCountRingSize: 5,

@@ -1,3 +1,7 @@
+## [1.1.0] - 23/09/2021
+* Remove `onUnselectAll`
+* Add `backAndUnselect`: if true unselect item in this session
+* Add ValueNotifier `PanelState` for check panel is show or hide
 ## [1.0.9] - 23/09/2021
 * Fix height panel
 * Fix keyboard show, selected item is cleared

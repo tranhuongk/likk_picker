@@ -9,7 +9,6 @@ import 'package:likk_picker/src/slidable_panel/slidable_panel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 // ignore: always_use_package_imports
@@ -226,59 +225,53 @@ class _GalleryViewState extends State<GalleryView>
   }
 
   //
-  void _showAlert(GallerySetting gallerySetting) {
-    if (gallerySetting.onUnselectAll != null) {
-      if (gallerySetting.onUnselectAll!()) {
-        _onSelectionClear();
-      }
-      return;
-    }
-    final cancel = TextButton(
-      onPressed: Navigator.of(context).pop,
-      child: Text(
-        'CANCEL',
-        style: Theme.of(context).textTheme.button!.copyWith(
-              color: Colors.lightBlue,
-            ),
-      ),
-    );
-    final unselectItems = TextButton(
-      onPressed: _onSelectionClear,
-      child: Text(
-        'USELECT ITEMS',
-        style: Theme.of(context).textTheme.button!.copyWith(
-              color: Colors.blue,
-            ),
-      ),
-    );
+  // void _showAlert(GallerySetting gallerySetting) {
+  //   final cancel = TextButton(
+  //     onPressed: Navigator.of(context).pop,
+  //     child: Text(
+  //       'CANCEL',
+  //       style: Theme.of(context).textTheme.button!.copyWith(
+  //             color: Colors.lightBlue,
+  //           ),
+  //     ),
+  //   );
+  //   final unselectItems = TextButton(
+  //     onPressed: _onSelectionClear,
+  //     child: Text(
+  //       'USELECT ITEMS',
+  //       style: Theme.of(context).textTheme.button!.copyWith(
+  //             color: Colors.blue,
+  //           ),
+  //     ),
+  //   );
 
-    final alertDialog = AlertDialog(
-      title: Text(
-        'Unselect these items?',
-        style: Theme.of(context).textTheme.headline6!.copyWith(
-              color: Colors.white70,
-            ),
-      ),
-      content: Text(
-        'Going back will undo the selections you made.',
-        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-              color: Colors.grey.shade600,
-            ),
-      ),
-      actions: [cancel, unselectItems],
-      backgroundColor: Colors.grey.shade900,
-      titlePadding: const EdgeInsets.all(16),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 2,
-      ),
-    );
+  //   final alertDialog = AlertDialog(
+  //     title: Text(
+  //       'Unselect these items?',
+  //       style: Theme.of(context).textTheme.headline6!.copyWith(
+  //             color: Colors.white70,
+  //           ),
+  //     ),
+  //     content: Text(
+  //       'Going back will undo the selections you made.',
+  //       style: Theme.of(context).textTheme.bodyText2!.copyWith(
+  //             color: Colors.grey.shade600,
+  //           ),
+  //     ),
+  //     actions: [cancel, unselectItems],
+  //     backgroundColor: Colors.grey.shade900,
+  //     titlePadding: const EdgeInsets.all(16),
+  //     contentPadding: const EdgeInsets.symmetric(
+  //       horizontal: 16,
+  //       vertical: 2,
+  //     ),
+  //   );
 
-    showDialog<void>(
-      context: context,
-      builder: (context) => alertDialog,
-    );
-  }
+  //   showDialog<void>(
+  //     context: context,
+  //     builder: (context) => alertDialog,
+  //   );
+  // }
 
   Future<bool> _onClosePressed() async {
     if (_animationController.isAnimating) return false;
@@ -288,14 +281,22 @@ class _GalleryViewState extends State<GalleryView>
       return false;
     }
 
-    if (_controller.value.selectedEntities.isNotEmpty &&
-        (_controller.setting.onUnselectAll == null ||
-            _controller.setting.onUnselectAll!())) {
-      _showAlert(_controller.setting);
-      return false;
-    }
-
     if (_controller.fullScreenMode) {
+      // if (_controller.value.selectedEntities.isNotEmpty &&
+      //     _controller.setting.onUnselectAll == null) {
+      //   _showAlert(_controller.setting);
+      //   return false;
+      // }
+      if (_controller.setting.backAndUnselect == null ||
+          _controller.setting.backAndUnselect!()) {
+        _controller._internal = true;
+        // ignore: cascade_invocations
+        _controller.value = _controller.value.copyWith(
+          selectedEntities: _controller._cachedInitList,
+          previousSelection: false,
+        );
+      }
+      _controller.galleryState.value = GalleryState.hide;
       Navigator.of(context).pop();
       return true;
     }
@@ -310,10 +311,10 @@ class _GalleryViewState extends State<GalleryView>
     return true;
   }
 
-  void _onSelectionClear() {
-    _controller.clearSelection();
-    Navigator.of(context).pop();
-  }
+  // void _onSelectionClear() {
+  //   _controller.clearSelection();
+  //   Navigator.of(context).pop();
+  // }
 
   void _onALbumChange(AssetPathEntity album) {
     if (_animationController.isAnimating) return;
@@ -323,6 +324,7 @@ class _GalleryViewState extends State<GalleryView>
 
   @override
   Widget build(BuildContext context) {
+    _controller._cachedInitList = _controller.value.selectedEntities;
     final ps = _controller.panelSetting;
     final hs = _controller.headerSetting;
     final _panelMaxHeight =
@@ -665,6 +667,12 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
   final _wrapperKey = GlobalKey();
 
+  List<LikkEntity> _cachedInitList = [];
+
+  /// Recent entities notifier
+  final ValueNotifier<GalleryState> galleryState =
+      ValueNotifier(GalleryState.show);
+
   // ignore: public_member_api_docs
   bool get isShowPanel => _panelController.isVisible;
 
@@ -748,6 +756,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     if (_fullScreenMode) {
       Navigator.of(context).pop(value.selectedEntities);
     } else {
+      galleryState.value = GalleryState.hide;
       _panelController.closePanel();
       // _checkKeyboard.value = false;
     }
@@ -760,6 +769,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   /// close panel or page
   void close([BuildContext? context]) {
     if (!_fullScreenMode) {
+      galleryState.value = GalleryState.hide;
       _panelController.closePanel();
       return;
     }
@@ -770,6 +780,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
   /// When panel closed without any selection
   void _closePanel() {
+    galleryState.value = GalleryState.hide;
     _panelController.closePanel();
     final entities = (_clearedSelection || value.selectedEntities.isEmpty)
         ? <LikkEntity>[]
@@ -783,6 +794,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
   /// Close collapsable panel if camera is selected from inside gallery view
   void _closeOnCameraSelect() {
+    galleryState.value = GalleryState.hide;
     _panelController.closePanel();
     // _checkKeyboard.value = false;
     _internal = true;
@@ -883,6 +895,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
     _repository.fetchAlbums(setting.requestType);
     _completer = Completer<List<LikkEntity>>();
+    galleryState.value = GalleryState.show;
 
     if (_wrapperKey.currentState == null) {
       _fullScreenMode = true;
@@ -907,7 +920,6 @@ class GalleryController extends ValueNotifier<GalleryValue> {
         previousSelection: true,
       );
     }
-
     return _completer.future;
   }
 
@@ -950,8 +962,13 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     if (_entitiesNotifier.hasListeners) _entitiesNotifier.dispose();
     if (_recentEntities.hasListeners) _recentEntities.dispose();
     if (_albumVisibility.hasListeners) _albumVisibility.dispose();
+    if (galleryState.hasListeners) galleryState.dispose();
     super.dispose();
   }
 
   //
 }
+
+/// State of panel
+// ignore: public_member_api_docs
+enum GalleryState { show, hide }
