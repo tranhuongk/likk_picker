@@ -1,3 +1,6 @@
+## [1.1.1] - 22/10/2021
+* Fix `maximum = 1`
+
 ## [1.1.0] - 23/09/2021
 * Remove `onUnselectAll`
 * Add `backAndUnselect`: if true unselect item in this session

@@ -199,8 +199,8 @@ class _MediaTile extends StatelessWidget {
                     ),
 
                   // Image selection overlay
-                  if (!controller.singleSelection)
-                    _SelectionCount(controller: controller, entity: dEntity),
+                  // if (!controller.singleSelection)
+                  _SelectionCount(controller: controller, entity: dEntity),
 
                   //
                 ],
