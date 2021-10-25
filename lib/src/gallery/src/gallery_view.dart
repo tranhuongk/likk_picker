@@ -709,36 +709,37 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
   /// Selecting and unselecting entities
   void _select(LikkEntity entity, BuildContext context) {
-    // if (singleSelection) {
-    //   _onChanged?.call(entity, false);
-    //   if (setting.onItemClick != null) {
-    //     setting.onItemClick!(entity, [entity]);
-    //   }
-    // } else
-    // {
-    _clearedSelection = false;
     final selectedList = value.selectedEntities.toList();
-    if (selectedList.contains(entity)) {
-      selectedList.remove(entity);
-      _onChanged?.call(entity, true);
-    } else {
-      if (reachedMaximumLimit) {
-        if (setting.onReachedMaximumLimit == null)
-          // ignore: curly_braces_in_flow_control_structures
-          ScaffoldMessenger.of(context)
-            ..clearSnackBars()
-            ..showSnackBar(SnackBar(
-                content: Text(
-              'Maximum selection limit of '
-              '${setting.maximum} has been reached!',
-            )));
-        else {
-          setting.onReachedMaximumLimit!();
-        }
-        return;
-      }
-      selectedList.add(entity);
+    if (singleSelection) {
+      _clearedSelection = false;
+      selectedList
+        ..clear()
+        ..add(entity);
       _onChanged?.call(entity, false);
+    } else {
+      _clearedSelection = false;
+      if (selectedList.contains(entity)) {
+        selectedList.remove(entity);
+        _onChanged?.call(entity, true);
+      } else {
+        if (reachedMaximumLimit) {
+          if (setting.onReachedMaximumLimit == null)
+            // ignore: curly_braces_in_flow_control_structures
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(SnackBar(
+                  content: Text(
+                'Maximum selection limit of '
+                '${setting.maximum} has been reached!',
+              )));
+          else {
+            setting.onReachedMaximumLimit!();
+          }
+          return;
+        }
+        selectedList.add(entity);
+        _onChanged?.call(entity, false);
+      }
     }
     _internal = true;
     value = value.copyWith(
@@ -749,7 +750,6 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     if (setting.onItemClick != null) {
       setting.onItemClick!(entity, selectedList);
     }
-    // }
   }
 
   /// When selection is completed

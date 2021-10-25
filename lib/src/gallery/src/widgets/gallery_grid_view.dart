@@ -286,20 +286,35 @@ class _SelectionCount extends StatelessWidget {
                             12) +
                         (controller.setting.selectionCountRingSize ?? 1),
                     child: CircleAvatar(
-                      backgroundColor:
-                          controller.setting.selectionCountBackgroundColor ??
-                              Theme.of(context).primaryColor,
-                      radius:
-                          controller.setting.selectionCountBackgroundSize ?? 12,
-                      child: Text(
-                        '${index + 1}',
-                        style: controller.setting.selectionCountTextStyle ??
-                            Theme.of(context).textTheme.button?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ),
-                      ),
-                    ),
+                        backgroundColor:
+                            controller.setting.selectionCountBackgroundColor ??
+                                Theme.of(context).primaryColor,
+                        radius:
+                            controller.setting.selectionCountBackgroundSize ??
+                                12,
+                        child: Padding(
+                          padding: const EdgeInsets.all(1),
+                          child: FittedBox(
+                            child: controller.setting.maximum == 1
+                                ? const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    '${index + 1}',
+                                    style: controller
+                                            .setting.selectionCountTextStyle ??
+                                        Theme.of(context)
+                                            .textTheme
+                                            .button
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                            ),
+                                  ),
+                          ),
+                        )),
                   ),
           ),
         );
