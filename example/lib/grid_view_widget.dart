@@ -4,10 +4,18 @@ import 'package:flutter/material.dart';
 ///
 class GridViewWidget extends StatelessWidget {
   ///
-  const GridViewWidget({
+  GridViewWidget({
     Key? key,
     required this.notifier,
+    this.isPlayground = false,
+    this.onCreated,
   }) : super(key: key);
+
+  ///
+  final bool isPlayground;
+
+  ///
+  final Function(PlaygroundController)? onCreated;
 
   ///
   final ValueNotifier<List<LikkEntity>> notifier;
@@ -22,6 +30,20 @@ class GridViewWidget extends StatelessWidget {
             child: Text('No data'),
           );
         }
+        final controller = PlaygroundController(
+          background: PhotoBackground(bytes: list.first.bytes),
+        );
+
+        if (onCreated != null) {
+          onCreated!(controller);
+        }
+        if (isPlayground) {
+          return Playground(
+            enableOverlay: false,
+            controller: controller,
+          );
+        }
+        // controller.updateValue(hasFocus: true);
 
         return GridView.builder(
           padding: const EdgeInsets.all(4.0),

@@ -50,6 +50,7 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
 
   @override
   Widget build(BuildContext context) {
+    PlaygroundController? playgroundController;
     return GalleryViewWrapper(
       controller: controller,
       safeAreaBottom: true,
@@ -62,23 +63,55 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
           body: Column(
             children: [
               // Grid view
-              Expanded(child: GridViewWidget(notifier: notifier)),
-
+              Expanded(
+                child: GridViewWidget(
+                  notifier: notifier,
+                  isPlayground: true,
+                  onCreated: (ctl) => playgroundController = ctl,
+                ),
+              ),
               //
               Builder(builder: (context) {
-                return TextButton(
-                  onPressed: () async {
-                    final entities = await controller.pick(
-                      context,
-                      selectedEntities: notifier.value,
-                    );
-                    notifier.value = entities;
-                  },
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text('Use Controller'),
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        playgroundController?.updateValue(hasFocus: true);
+                      },
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.green,
+                      ),
+                      child: const Text('Add Text'),
+                    ),
+                    const SizedBox(width: 20),
+                    TextButton(
+                      onPressed: () async {
+                        final entities = await controller.pick(
+                          context,
+                          selectedEntities: notifier.value,
+                        );
+                        notifier.value = entities;
+                      },
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.green,
+                      ),
+                      child: const Text('Use Controller'),
+                    ),
+                    const SizedBox(width: 20),
+                    TextButton(
+                      onPressed: () {
+                        playgroundController?.takeScreenshot();
+                      },
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.green,
+                      ),
+                      child: const Text('Capture'),
+                    ),
+                  ],
                 );
               }),
 

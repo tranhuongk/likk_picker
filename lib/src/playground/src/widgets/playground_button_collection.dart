@@ -17,10 +17,14 @@ class PlaygroundButtonCollection extends StatelessWidget {
     Key? key,
     required this.controller,
     this.stickerViewBackground,
+    this.enableOverlay = true,
   }) : super(key: key);
 
   ///
   final PlaygroundController controller;
+
+  ///
+  final bool enableOverlay;
 
   ///
   final Color? stickerViewBackground;
@@ -116,16 +120,17 @@ class PlaygroundButtonCollection extends StatelessWidget {
             },
             isVisible: hasFocus,
           ),
-          _Button(
-            label: 'Aa',
-            size: hasFocus ? 48.0 : 44.0,
-            fontSize: hasFocus ? 24.0 : 20.0,
-            background: hasFocus ? Colors.white : Colors.black38,
-            labelColor: hasFocus ? Colors.black : Colors.white,
-            onPressed: () {
-              controller.updateValue(hasFocus: !hasFocus);
-            },
-          ),
+          if (enableOverlay)
+            _Button(
+              label: 'Aa',
+              size: hasFocus ? 48.0 : 44.0,
+              fontSize: hasFocus ? 24.0 : 20.0,
+              background: hasFocus ? Colors.white : Colors.black38,
+              labelColor: hasFocus ? Colors.black : Colors.white,
+              onPressed: () {
+                controller.updateValue(hasFocus: !hasFocus);
+              },
+            ),
           _Button(
             isVisible: hasFocus,
             onPressed: _textAlignButtonPressed,
@@ -136,13 +141,14 @@ class PlaygroundButtonCollection extends StatelessWidget {
             onPressed: _textBackgroundButtonPressed,
             child: _TextBackgroundIcon(isSelected: controller.value.fillColor),
           ),
-          _Button(
-            isVisible: !hasFocus,
-            iconData: Icons.emoji_emotions,
-            onPressed: () {
-              _onStickerIconPressed(context);
-            },
-          ),
+          if (enableOverlay)
+            _Button(
+              isVisible: !hasFocus,
+              iconData: Icons.emoji_emotions,
+              onPressed: () {
+                _onStickerIconPressed(context);
+              },
+            ),
         ],
       ),
     );

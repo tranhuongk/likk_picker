@@ -19,10 +19,14 @@ class PlaygroundOverlay extends StatelessWidget {
   const PlaygroundOverlay({
     Key? key,
     required this.controller,
+    this.enableOverlay = true,
   }) : super(key: key);
 
   ///
   final PlaygroundController controller;
+
+  ///
+  final bool enableOverlay;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +47,12 @@ class PlaygroundOverlay extends StatelessWidget {
             PlaygroundTextfield(controller: controller),
 
             // Close button
-            Positioned(
-              left: 8.0,
-              top: _top,
-              child: PlaygroundCloseButton(controller: controller),
-            ),
+            if (enableOverlay)
+              Positioned(
+                left: 8.0,
+                top: _top,
+                child: PlaygroundCloseButton(controller: controller),
+              ),
 
             // Background changer
             Positioned(
@@ -68,7 +73,10 @@ class PlaygroundOverlay extends StatelessWidget {
             Positioned(
               right: 16.0,
               top: controller.value.stickerPickerView ? 0.0 : _top,
-              child: PlaygroundButtonCollection(controller: controller),
+              child: PlaygroundButtonCollection(
+                controller: controller,
+                enableOverlay: enableOverlay,
+              ),
             ),
 
             //

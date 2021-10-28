@@ -11,3 +11,4 @@ export 'src/widgets/playground_close_button.dart';
 export 'src/widgets/playground_controller_provider.dart';
 export 'src/widgets/playground_overlay.dart';
 export 'src/widgets/playground_sticker_picker.dart';
+export 'src/widgets/playground_textfield.dart';

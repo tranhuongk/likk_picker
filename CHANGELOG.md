@@ -1,5 +1,6 @@
 ## [1.1.2] - 22/10/2021
 * Update UI maximum = 1
+* Update public playground
 
 ## [1.1.1] - 22/10/2021
 * Fix `maximum = 1`

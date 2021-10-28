@@ -99,8 +99,10 @@ class _PlaygroundState extends State<Playground> {
                 PlaygroundTextfield(controller: _controller),
 
                 // Overlay
-                if (widget.enableOverlay)
-                  PlaygroundOverlay(controller: _controller),
+                PlaygroundOverlay(
+                  controller: _controller,
+                  enableOverlay: widget.enableOverlay,
+                ),
               ],
             );
           },

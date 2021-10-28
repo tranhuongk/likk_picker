@@ -105,13 +105,16 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
         children: [
           // Grid view
           Expanded(child: GridViewWidget(notifier: notifier)),
-
+          PlaygroundTextfield(
+            controller: PlaygroundController(),
+          ),
           TextButton(
             onPressed: () async {
               final entities = await controller.pick(
                 context,
                 selectedEntities: notifier.value,
               );
+
               notifier.value = entities;
             },
             style: TextButton.styleFrom(

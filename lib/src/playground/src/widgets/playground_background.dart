@@ -49,7 +49,7 @@ class PhotoBackgroundView extends StatelessWidget {
         if (background.bytes != null) {
           return Image.memory(
             background.bytes!,
-            fit: BoxFit.contain,
+            fit: BoxFit.cover,
           );
         } else if (background.url != null) {
           return Image.network(
