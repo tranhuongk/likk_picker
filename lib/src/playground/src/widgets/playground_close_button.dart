@@ -19,7 +19,7 @@ class PlaygroundCloseButton extends StatelessWidget {
 
   void _onPressed(BuildContext context) {
     if (controller.isPlaygroundEmpty) {
-      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+      // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
       Navigator.of(context).pop();
     } else {
       showDialog<bool>(
