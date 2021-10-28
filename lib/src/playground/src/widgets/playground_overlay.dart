@@ -63,11 +63,12 @@ class PlaygroundOverlay extends StatelessWidget {
             ),
 
             // Screenshot capture button
-            Positioned(
-              right: 16.0,
-              bottom: 16.0,
-              child: PlaygroundCaptureButton(controller: controller),
-            ),
+            if (enableOverlay)
+              Positioned(
+                right: 16.0,
+                bottom: 16.0,
+                child: PlaygroundCaptureButton(controller: controller),
+              ),
 
             // Sticker buttons
             Positioned(
