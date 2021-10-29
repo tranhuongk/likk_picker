@@ -51,10 +51,10 @@ class PlaygroundController extends ValueNotifier<PlaygroundValue> {
       bool? isEditing,
       bool? stickerPickerView,
       bool? colorPickerVisibility}) {
-    if (!(hasFocus ?? false)) {
-      // Hide status bar
-      SystemChrome.setEnabledSystemUIOverlays([]);
-    }
+    // if (!(hasFocus ?? false)) {
+    //   // Hide status bar
+    //   SystemChrome.setEnabledSystemUIOverlays([]);
+    // }
     value = value.copyWith(
       fillColor: fillColor,
       maxLines: maxLines,
@@ -102,7 +102,7 @@ class PlaygroundController extends ValueNotifier<PlaygroundValue> {
         final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
         final data = byteData!.buffer.asUint8List();
         final entity = await PhotoManager.editor.saveImage(data);
-        await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        // await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         return LikkEntity(entity: entity!, bytes: data);
       }
     } catch (e) {
