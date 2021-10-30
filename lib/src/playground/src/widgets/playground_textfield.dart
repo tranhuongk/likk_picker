@@ -46,7 +46,9 @@ class _PlaygroundTextfieldState extends State<PlaygroundTextfield> {
           _textController.text = (s as TextSticker).text;
         },
         text: _textController.text,
-        style: _textStickerStyle,
+        style: _textStickerStyle.copyWith(
+          color: _controller.value.textColor,
+        ),
         textAlign: _controller.value.textAlign,
         withBackground: _controller.value.fillColor,
       );
@@ -119,7 +121,15 @@ class _PlaygroundTextfieldState extends State<PlaygroundTextfield> {
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
                 smartDashesType: SmartDashesType.disabled,
-                style: _textStickerStyle,
+                style: TextStyle(
+                  textBaseline: TextBaseline.ideographic,
+                  color: widget.controller.value.textColor,
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w700,
+                  decoration: TextDecoration.none,
+                  decorationColor: Colors.transparent,
+                  decorationThickness: 0.0,
+                ),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.all(8.0),

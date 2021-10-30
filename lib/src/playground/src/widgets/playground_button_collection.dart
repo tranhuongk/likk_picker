@@ -121,9 +121,9 @@ class PlaygroundButtonCollection extends StatelessWidget {
                 onPressed: (s) {
                   controller.textController.text = (s as TextSticker).text;
                 },
-                style: const TextStyle(
+                style: TextStyle(
                   textBaseline: TextBaseline.ideographic,
-                  color: Colors.white,
+                  color: controller.value.textColor,
                   fontSize: 13.0,
                   fontWeight: FontWeight.w700,
                   decoration: TextDecoration.none,
@@ -160,7 +160,9 @@ class PlaygroundButtonCollection extends StatelessWidget {
           ),
           _Button(
             isVisible: hasFocus,
-            onPressed: _textBackgroundButtonPressed,
+            // onPressed: _textBackgroundButtonPressed,
+            onPressed: () => controller.changeTextColor(
+                currentColor: controller.value.textColor),
             child: _TextBackgroundIcon(isSelected: controller.value.fillColor),
           ),
           if (enableOverlay)

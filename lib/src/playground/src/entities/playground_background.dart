@@ -47,3 +47,19 @@ const gradients = [
   GradientBackground([Color(0xFF2193b0), Color(0xFF6dd5ed)]),
   GradientBackground([Color(0xFF753a88), Color(0xFFcc2b5e)]),
 ];
+
+///
+const textColors = [
+  Color(0xffffffff),
+  Color(0xFF00C6FF),
+  Color(0xFFeb3349),
+  Color(0xFF26a0da),
+  Color(0xFFe65c00),
+  Color(0xFFfc6767),
+  Color(0xFF5433FF),
+  Color(0xFF334d50),
+  Color(0xFF1565C0),
+  Color(0xFF0052D4),
+  Color(0xFF2193b0), 
+  Color(0xFF753a88),
+];
