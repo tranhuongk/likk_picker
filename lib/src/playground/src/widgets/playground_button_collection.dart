@@ -116,7 +116,29 @@ class PlaygroundButtonCollection extends StatelessWidget {
         children: [
           _DoneButton(
             onPressed: () {
-              controller.updateValue(hasFocus: false);
+              final sticker = TextSticker(
+                extra: {'text': controller.textController.text},
+                onPressed: (s) {
+                  controller.textController.text = (s as TextSticker).text;
+                },
+                style: const TextStyle(
+                  textBaseline: TextBaseline.ideographic,
+                  color: Colors.white,
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w700,
+                  decoration: TextDecoration.none,
+                  decorationColor: Colors.transparent,
+                  decorationThickness: 0.0,
+                ),
+                text: controller.textController.text,
+                textAlign: controller.value.textAlign,
+                withBackground: controller.value.fillColor,
+              );
+
+              controller.updateValue(hasFocus: false, hasStickers: true);
+              Future.delayed(const Duration(milliseconds: 20), () {
+                controller.stickerController.addSticker(sticker);
+              });
             },
             isVisible: hasFocus,
           ),

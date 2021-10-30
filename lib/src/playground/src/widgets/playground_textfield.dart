@@ -144,7 +144,7 @@ class _PlaygroundTextfieldState extends State<PlaygroundTextfield> {
 const _textStickerStyle = TextStyle(
   textBaseline: TextBaseline.ideographic,
   color: Colors.white,
-  fontSize: 32.0,
+  fontSize: 13.0,
   fontWeight: FontWeight.w700,
   decoration: TextDecoration.none,
   decorationColor: Colors.transparent,
