@@ -84,21 +84,21 @@ class _PlaygroundStickersState extends State<PlaygroundStickers> {
         gaplessPlayback: true,
       );
     } else if (sticker is TextSticker) {
-      return Container(
-        constraints: BoxConstraints.loose(sticker.size),
-        decoration: BoxDecoration(
-          color: sticker.withBackground
-              ? _controller.value.textBackground.colors.first
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: FittedBox(
-          alignment: Alignment.center,
+      return FittedBox(
+        child: Container(
+          constraints: BoxConstraints.loose(sticker.size),
+          decoration: BoxDecoration(
+            color: sticker.withBackground
+                ? _controller.value.textBackground.colors.first
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             sticker.text,
             textAlign: sticker.textAlign,
             style: sticker.style,
+            overflow: TextOverflow.visible,
           ),
         ),
       );

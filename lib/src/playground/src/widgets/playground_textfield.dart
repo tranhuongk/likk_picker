@@ -40,7 +40,7 @@ class _PlaygroundTextfieldState extends State<PlaygroundTextfield> {
     final box = _tfSizeKey.currentContext?.findRenderObject() as RenderBox?;
     if (box != null) {
       final sticker = TextSticker(
-        size: box.size,
+        size: Size(250, 250),
         extra: {'text': _textController.text},
         onPressed: (s) {
           _textController.text = (s as TextSticker).text;

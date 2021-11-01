@@ -262,7 +262,7 @@ class _DraggablePointState extends State<_DraggablePoint> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.translucent,
+      behavior: HitTestBehavior.deferToChild,
       onTap: widget.onTap,
       onScaleStart: (details) {
         widget.onStart?.call();
