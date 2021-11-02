@@ -120,7 +120,7 @@ class TextSticker extends Sticker {
     this.style,
     this.withBackground = false,
     this.textAlign,
-    Size size = const Size(200.0, 200.0),
+    Size size = const Size(250.0, 250.0),
     ValueSetter<Sticker>? onPressed,
     Map<String, Object> extra = const {},
   }) : super(

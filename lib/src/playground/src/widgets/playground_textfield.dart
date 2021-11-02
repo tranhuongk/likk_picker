@@ -40,13 +40,15 @@ class _PlaygroundTextfieldState extends State<PlaygroundTextfield> {
     final box = _tfSizeKey.currentContext?.findRenderObject() as RenderBox?;
     if (box != null) {
       final sticker = TextSticker(
-        size: box.size,
+        size: Size(250, 250),
         extra: {'text': _textController.text},
         onPressed: (s) {
           _textController.text = (s as TextSticker).text;
         },
         text: _textController.text,
-        style: _textStickerStyle,
+        style: _textStickerStyle.copyWith(
+          color: _controller.value.textColor,
+        ),
         textAlign: _controller.value.textAlign,
         withBackground: _controller.value.fillColor,
       );
@@ -119,7 +121,15 @@ class _PlaygroundTextfieldState extends State<PlaygroundTextfield> {
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
                 smartDashesType: SmartDashesType.disabled,
-                style: _textStickerStyle,
+                style: TextStyle(
+                  textBaseline: TextBaseline.ideographic,
+                  color: widget.controller.value.textColor,
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w700,
+                  decoration: TextDecoration.none,
+                  decorationColor: Colors.transparent,
+                  decorationThickness: 0.0,
+                ),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.all(8.0),
@@ -144,7 +154,7 @@ class _PlaygroundTextfieldState extends State<PlaygroundTextfield> {
 const _textStickerStyle = TextStyle(
   textBaseline: TextBaseline.ideographic,
   color: Colors.white,
-  fontSize: 32.0,
+  fontSize: 13.0,
   fontWeight: FontWeight.w700,
   decoration: TextDecoration.none,
   decorationColor: Colors.transparent,

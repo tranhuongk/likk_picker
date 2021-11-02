@@ -16,6 +16,7 @@ class PlaygroundValue {
     GradientBackground? textBackground,
     this.stickerPickerView = false,
     this.colorPickerVisibility = false,
+    this.textColor = Colors.white,
   })  : background = background ?? gradients[0],
         textBackground = textBackground ?? gradients[0];
 
@@ -49,6 +50,9 @@ class PlaygroundValue {
   ///
   final bool colorPickerVisibility;
 
+  ///
+  final Color textColor;
+
   /// -ve number as null
   int? get convertedMaxLines => maxLines.isNegative ? null : maxLines;
 
@@ -64,7 +68,8 @@ class PlaygroundValue {
       PlaygroundBackground? background,
       GradientBackground? textBackground,
       bool? stickerPickerView,
-      bool? colorPickerVisibility}) {
+      bool? colorPickerVisibility,
+      Color? textColor}) {
     return PlaygroundValue(
       textAlign: textAlign ?? this.textAlign,
       fillColor: fillColor ?? this.fillColor,
@@ -77,6 +82,7 @@ class PlaygroundValue {
       stickerPickerView: stickerPickerView ?? this.stickerPickerView,
       colorPickerVisibility:
           colorPickerVisibility ?? this.colorPickerVisibility,
+      textColor: textColor ?? this.textColor,
     );
   }
 }

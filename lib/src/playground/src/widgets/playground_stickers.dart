@@ -84,21 +84,21 @@ class _PlaygroundStickersState extends State<PlaygroundStickers> {
         gaplessPlayback: true,
       );
     } else if (sticker is TextSticker) {
-      return Container(
-        constraints: BoxConstraints.loose(sticker.size),
-        decoration: BoxDecoration(
-          color: sticker.withBackground
-              ? _controller.value.textBackground.colors.first
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: FittedBox(
-          alignment: Alignment.center,
+      return FittedBox(
+        child: Container(
+          constraints: BoxConstraints.loose(sticker.size),
+          decoration: BoxDecoration(
+            color: sticker.withBackground
+                ? _controller.value.textBackground.colors.first
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             sticker.text,
             textAlign: sticker.textAlign,
             style: sticker.style,
+            overflow: TextOverflow.visible,
           ),
         ),
       );
@@ -184,8 +184,8 @@ class _PlaygroundStickersState extends State<PlaygroundStickers> {
                   child: AnimatedContainer(
                     key: _deleteKey,
                     duration: const Duration(milliseconds: 100),
-                    height: _collied ? 60.0 : 48.0,
-                    width: _collied ? 60.0 : 48.0,
+                    height: _collied ? 50.0 : 38.0,
+                    width: _collied ? 50.0 : 38.0,
                     margin: const EdgeInsets.only(bottom: 24.0),
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
@@ -194,7 +194,7 @@ class _PlaygroundStickersState extends State<PlaygroundStickers> {
                     child: Icon(
                       Icons.delete,
                       color: Colors.white,
-                      size: _collied ? 36.0 : 30.0,
+                      size: _collied ? 26.0 : 20.0,
                     ),
                   ),
                 ),

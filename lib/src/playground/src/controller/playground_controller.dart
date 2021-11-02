@@ -92,6 +92,25 @@ class PlaygroundController extends ValueNotifier<PlaygroundValue> {
     }
   }
 
+  /// Change text color
+  void changeTextColor({Color currentColor = const Color(0xffffffff)}) {
+    late int _index;
+
+    if (currentColor == const Color(0xFF753a88)) {
+      _index = -1;
+    } else {
+      _index = textColors.indexOf(currentColor);
+    }
+
+    final sticker =
+        TextSticker(style: TextStyle(color: textColors[_index + 1]));
+
+    value = value.copyWith(
+      textColor: textColors[_index + 1],
+    );
+    stickerController.addSticker(sticker);
+  }
+
   /// Take screen shot of the playground
   Future<LikkEntity?> takeScreenshot() async {
     try {

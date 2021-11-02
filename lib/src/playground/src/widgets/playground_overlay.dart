@@ -44,7 +44,7 @@ class PlaygroundOverlay extends StatelessWidget {
             ),
 
             // Textfield
-            PlaygroundTextfield(controller: controller),
+            // PlaygroundTextfield(controller: controller),
 
             // Close button
             if (enableOverlay)
