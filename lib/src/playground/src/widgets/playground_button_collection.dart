@@ -138,6 +138,7 @@ class PlaygroundButtonCollection extends StatelessWidget {
               controller.updateValue(hasFocus: false, hasStickers: true);
               Future.delayed(const Duration(milliseconds: 20), () {
                 controller.stickerController.addSticker(sticker);
+                controller.textController.clear();
               });
             },
             isVisible: hasFocus,

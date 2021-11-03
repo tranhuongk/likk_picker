@@ -58,6 +58,7 @@ class _PlaygroundTextfieldState extends State<PlaygroundTextfield> {
 
       Future.delayed(const Duration(milliseconds: 20), () {
         _controller.stickerController.addSticker(sticker);
+        _controller.textController.clear();
       });
     }
   }
