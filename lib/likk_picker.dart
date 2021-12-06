@@ -26,6 +26,7 @@ export 'src/playground/src/widgets/playground_controller_provider.dart';
 export 'src/playground/src/widgets/playground_overlay.dart';
 export 'src/playground/src/widgets/playground_sticker_picker.dart';
 export 'src/playground/src/widgets/playground_textfield.dart';
+export 'src/sticker_booth/src/entities/sticker_asset.dart';
 
 // ignore: public_member_api_docs
 double? kKeyboardHeight;
