@@ -551,13 +551,13 @@ class _GalleryViewFieldState extends State<GalleryViewField> {
     }
   }
 
-  @override
-  void dispose() {
-    if (_dispose) {
-      _controller.dispose();
-    }
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   if (_dispose) {
+  //     _controller.dispose();
+  //   }
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
