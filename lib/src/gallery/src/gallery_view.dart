@@ -803,7 +803,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// Open camera from [GalleryView]
-  Future<void> openCamera(BuildContext context) async {
+  Future<LikkEntity?> openCamera(BuildContext context) async {
     _accessCamera = true;
     LikkEntity? entity;
 
@@ -829,6 +829,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     }
     _accessCamera = false;
     _completer.complete(entities);
+    return entity;
   }
 
   /// Open camera from [GalleryView]

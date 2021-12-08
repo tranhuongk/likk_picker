@@ -1,3 +1,7 @@
+## [1.1.3] - 08/12/2021
+* Fix dispose
+* return LikkEntity in openCamera function
+
 ## [1.1.2] - 22/10/2021
 * Update UI maximum = 1
 * Update public playground

@@ -1,6 +1,6 @@
 name: likk_picker
 description: Camera and Gallery picker asset from Photo Manager. Custom view from Facebook Messenger. (Image Picker, Camera, Gallery Reader)
-version: 1.1.2
+version: 1.1.3
 homepage: https://github.com/tranhuongk/likk_picker
 
 environment:

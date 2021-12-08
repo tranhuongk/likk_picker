@@ -61,18 +61,18 @@ class GalleryGridView extends StatelessWidget {
                 }
               }
 
-              // No data
-              if (!state.isLoading && (state.data?.isEmpty ?? true)) {
-                return const Center(
-                  child: Text(
-                    'No media available',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                );
-              }
+              // // No data
+              // if (!state.isLoading && (state.data?.isEmpty ?? true)) {
+              //   return const Center(
+              //     child: Text(
+              //       'No media available',
+              //       style: TextStyle(
+              //         color: Colors.white,
+              //         fontWeight: FontWeight.w700,
+              //       ),
+              //     ),
+              //   );
+              // }
 
               final entities = state.isLoading ? <AssetEntity>[] : state.data!;
 
