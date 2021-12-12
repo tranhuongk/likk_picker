@@ -13,7 +13,11 @@
   <a><img src="https://img.shields.io/github/forks/tranhuongk/likk_picker" alt="Forks"/></a>
 </p>
 
+
+<center><a href="https://www.paypal.com/paypalme/tranhuongk" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a></center>
+
 ---
+
 
 <p align="center">A flutter package which is clone of facebook messenger gallery picker and camera, combined as single component. Gallery view and Camera view can also be use as Flutter widget. Under the hood likk picker used <a href="https://pub.dev/packages/photo_manager">Photo Manager</a> and <a href="https://pub.dev/packages/camera">Camera</a>. Custom from <a href="https://pub.dev/packages/drishya_picker">Drishya Picker</a>.</p>
 

@@ -53,6 +53,19 @@ class GalleryRepository {
 
       final albums = await PhotoManager.getAssetPathList(type: type);
 
+      for (var i = 0; i < albums.length; i++) {
+        if (albums[i].name.toLowerCase() == 'hidden') {
+          albums.removeAt(i);
+        }
+        if (albums[i].name.toLowerCase().contains('recent') ||
+            albums[i].name.toLowerCase().contains('camera roll')) {
+          final tmp = albums[i];
+          albums.removeAt(i);
+          // ignore: cascade_invocations
+          albums.insert(0, tmp);
+        }
+      }
+
       // Update album list
       albumsNotifier.value = BaseState(data: albums, hasPermission: true);
 

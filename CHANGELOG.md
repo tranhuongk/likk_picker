@@ -1,3 +1,7 @@
+## [1.1.4] - 08/12/2021
+* Hide Hidden album 
+* Put Recents album to first
+
 ## [1.1.3] - 08/12/2021
 * Fix dispose
 * return LikkEntity in openCamera function
