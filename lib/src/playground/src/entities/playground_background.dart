@@ -60,6 +60,6 @@ const textColors = [
   Color(0xFF334d50),
   Color(0xFF1565C0),
   Color(0xFF0052D4),
-  Color(0xFF2193b0), 
+  Color(0xFF2193b0),
   Color(0xFF753a88),
 ];

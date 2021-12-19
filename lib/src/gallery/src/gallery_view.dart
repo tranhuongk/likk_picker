@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:image_cropper/image_cropper.dart';
 import 'package:likk_picker/likk_picker.dart';
 import 'package:likk_picker/src/animations/animations.dart';
 import 'package:likk_picker/src/camera/camera_view.dart';
@@ -188,7 +190,7 @@ class _GalleryViewState extends State<GalleryView>
   late final AnimationController _animationController;
   late final Animation<double> _animation;
 
-  double albumHeight = 0.0;
+  double albumHeight = 0;
 
   @override
   void initState() {
@@ -406,7 +408,7 @@ class _GalleryViewState extends State<GalleryView>
         GalleryAssetSelector(
           controller: _controller,
           onEdit: (e) {
-            _controller._openPlayground(context, e);
+            _controller.openPlayground(context, e);
           },
           onSubmit: _controller.completeTask,
         ),
@@ -423,7 +425,7 @@ class _GalleryViewState extends State<GalleryView>
             return Visibility(
               visible: _animation.value > 0.0,
               child: Transform.translate(
-                offset: Offset(0.0, offsetY),
+                offset: Offset(0, offsetY),
                 child: child,
               ),
             );
@@ -495,6 +497,7 @@ class GalleryViewField extends StatefulWidget {
   /// If used [GalleryViewField] with [GalleryViewWrapper]
   /// this setting will be ignored.
   ///
+  // ignore: lines_longer_than_80_chars
   /// [GalleryController] passed to the [GalleryViewWrapper] will be applicable..
   /// ///
   final GalleryController controller;
@@ -753,7 +756,8 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// When selection is completed
-  void completeTask(BuildContext context) {
+  // ignore: avoid_void_async
+  void completeTask(BuildContext context) async {
     if (_fullScreenMode) {
       Navigator.of(context).pop(value.selectedEntities);
     } else {
@@ -761,6 +765,17 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       _panelController.closePanel();
       // _checkKeyboard.value = false;
     }
+
+    if (setting.enableCropper &&
+        value.selectedEntities.length == 1 &&
+        value.selectedEntities.first.entity.type == AssetType.image) {
+      final entity = await openCropper(context, value.selectedEntities.first);
+      if (entity != null) {
+        value.selectedEntities.clear();
+        value.selectedEntities.add(entity);
+      }
+    }
+
     _onSubmitted?.call(value.selectedEntities);
     _completer.complete(value.selectedEntities);
     // _internal = true;
@@ -810,7 +825,6 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     final route = SlideTransitionPageRoute<LikkEntity>(
       builder: const CameraView(),
       begainHorizontal: true,
-      endHorizontal: false,
       transitionDuration: const Duration(milliseconds: 300),
     );
 
@@ -821,19 +835,84 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       _closeOnCameraSelect();
     }
 
-    var entities = [...value.selectedEntities];
-    if (entity != null) {
-      entities.add(entity);
-      _onChanged?.call(entity, false);
-      _onSubmitted?.call(entities);
+    final entities = [...value.selectedEntities];
+    if (entity == null) {
+      _accessCamera = false;
+      _completer.complete(entities);
+      return null;
     }
+
+    if (setting.enableCropper && entity.entity.type == AssetType.image) {
+      // ignore: use_build_context_synchronously
+      final editedEntity = await openCropper(context, entity);
+      if (editedEntity != null) {
+        entity = editedEntity;
+      }
+    }
+    if (entities.length == setting.maximum) {
+      entities.removeAt(0);
+    }
+    entities.add(entity);
+    _onChanged?.call(entity, false);
+    _onSubmitted?.call(entities);
     _accessCamera = false;
     _completer.complete(entities);
     return entity;
   }
 
   /// Open camera from [GalleryView]
-  Future<void> _openPlayground(
+  Future<LikkEntity?> openCropper(
+      BuildContext context, LikkEntity entity) async {
+    _accessCamera = true;
+
+    if (!fullScreenMode) {
+      _closeOnCameraSelect();
+    }
+    final file = await entity.entity.file;
+
+    if (file == null) {
+      return null;
+    }
+
+    final croppedFile = await ImageCropper.cropImage(
+      sourcePath: file.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9
+      ],
+      androidUiSettings: const AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Colors.deepOrange,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false),
+      iosUiSettings: const IOSUiSettings(
+        minimumAspectRatio: 1,
+      ),
+    );
+    final data = await croppedFile?.readAsBytes();
+
+    if (data == null) {
+      return null;
+    }
+
+    final assetEntity = await PhotoManager.editor.saveImage(data);
+
+    if (assetEntity == null) {
+      return null;
+    }
+    _accessCamera = false;
+    return LikkEntity(
+      entity: assetEntity,
+      bytes: data,
+    );
+  }
+
+  /// Open camera from [GalleryView]
+  Future<void> openPlayground(
     BuildContext context,
     LikkEntity entity,
   ) async {
@@ -860,8 +939,8 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
     var entities = [...value.selectedEntities];
     if (pickedEntity != null) {
-      entities.add(entity);
-      _onChanged?.call(entity, false);
+      entities.add(pickedEntity);
+      _onChanged?.call(pickedEntity, false);
       _onSubmitted?.call(entities);
     }
     _accessCamera = false;

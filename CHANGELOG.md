@@ -1,6 +1,7 @@
 ## [1.1.4] - 08/12/2021
 * Hide Hidden album 
 * Put Recents album to first
+* Add Image Cropper if maximum = 1 or open camera
 
 ## [1.1.3] - 08/12/2021
 * Fix dispose

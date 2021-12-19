@@ -9,6 +9,7 @@ import 'package:photo_manager/photo_manager.dart';
 class GallerySetting {
   ///
   const GallerySetting({
+    this.enableCropper = false,
     this.requestType = RequestType.all,
     this.maximum = 20,
     this.enableCamera = true,
@@ -37,6 +38,9 @@ class GallerySetting {
     this.albumSubTitleStyle,
     this.cameraItemWidget,
   });
+
+  /// Enable image cropper when maximum = 1 or open camera
+  final bool enableCropper;
 
   /// Padding for panel content
   final EdgeInsets? padding;
@@ -138,6 +142,7 @@ class GallerySetting {
 
   /// Helper function
   GallerySetting copyWith({
+    bool? enableCropper,
     SelectedStyle? selectedStyle,
     VoidCallback? onReachedMaximumLimit,
     RequestType? requestType,
@@ -167,6 +172,7 @@ class GallerySetting {
     Widget? cameraItemWidget,
   }) {
     return GallerySetting(
+      enableCropper: enableCropper ?? this.enableCropper,
       requestType: requestType ?? this.requestType,
       maximum: maximum ?? this.maximum,
       enableCamera: enableCamera ?? this.enableCamera,
