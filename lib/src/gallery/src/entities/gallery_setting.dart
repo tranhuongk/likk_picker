@@ -10,6 +10,7 @@ class GallerySetting {
   ///
   const GallerySetting({
     this.enableCropper = false,
+    this.saveCropper = false,
     this.requestType = RequestType.all,
     this.maximum = 20,
     this.enableCamera = true,
@@ -37,10 +38,13 @@ class GallerySetting {
     this.albumTitleStyle,
     this.albumSubTitleStyle,
     this.cameraItemWidget,
-  });
+  }) : assert(!(maximum > 1 && enableCropper));
 
   /// Enable image cropper when maximum = 1 or open camera
   final bool enableCropper;
+
+  /// Save image cropper to Gallery
+  final bool saveCropper;
 
   /// Padding for panel content
   final EdgeInsets? padding;
@@ -143,6 +147,7 @@ class GallerySetting {
   /// Helper function
   GallerySetting copyWith({
     bool? enableCropper,
+    bool? saveCropper,
     SelectedStyle? selectedStyle,
     VoidCallback? onReachedMaximumLimit,
     RequestType? requestType,
@@ -173,6 +178,7 @@ class GallerySetting {
   }) {
     return GallerySetting(
       enableCropper: enableCropper ?? this.enableCropper,
+      saveCropper: saveCropper ?? this.saveCropper,
       requestType: requestType ?? this.requestType,
       maximum: maximum ?? this.maximum,
       enableCamera: enableCamera ?? this.enableCamera,

@@ -758,22 +758,25 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   /// When selection is completed
   // ignore: avoid_void_async
   void completeTask(BuildContext context) async {
-    if (_fullScreenMode) {
-      Navigator.of(context).pop(value.selectedEntities);
-    } else {
-      galleryState.value = GalleryState.hide;
-      _panelController.closePanel();
-      // _checkKeyboard.value = false;
-    }
-
     if (setting.enableCropper &&
-        value.selectedEntities.length == 1 &&
+        setting.maximum == 1 &&
         value.selectedEntities.first.entity.type == AssetType.image) {
       final entity = await openCropper(context, value.selectedEntities.first);
       if (entity != null) {
         value.selectedEntities.clear();
         value.selectedEntities.add(entity);
+      } else {
+        return;
       }
+    }
+
+    if (_fullScreenMode) {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop(value.selectedEntities);
+    } else {
+      galleryState.value = GalleryState.hide;
+      _panelController.closePanel();
+      // _checkKeyboard.value = false;
     }
 
     _onSubmitted?.call(value.selectedEntities);
@@ -847,6 +850,8 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       final editedEntity = await openCropper(context, entity);
       if (editedEntity != null) {
         entity = editedEntity;
+      } else {
+        return null;
       }
     }
     if (entities.length == setting.maximum) {
@@ -876,30 +881,32 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
     final croppedFile = await ImageCropper.cropImage(
       sourcePath: file.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
       androidUiSettings: const AndroidUiSettings(
-          toolbarTitle: 'Cropper',
-          toolbarColor: Colors.deepOrange,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
-      iosUiSettings: const IOSUiSettings(
-        minimumAspectRatio: 1,
+        toolbarTitle: 'Cropper',
+        toolbarColor: Color(0xFFF54B64),
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.original,
+        lockAspectRatio: false,
       ),
+      iosUiSettings: const IOSUiSettings(),
     );
     final data = await croppedFile?.readAsBytes();
 
     if (data == null) {
       return null;
     }
-
-    final assetEntity = await PhotoManager.editor.saveImage(data);
+    
+    AssetEntity? assetEntity;
+    if (setting.saveCropper) {
+      assetEntity = await PhotoManager.editor.saveImage(data);
+    } else {
+      assetEntity = AssetEntity(
+        id: 'temporary',
+        typeInt: 1,
+        width: 100,
+        height: 100,
+      );
+    }
 
     if (assetEntity == null) {
       return null;
