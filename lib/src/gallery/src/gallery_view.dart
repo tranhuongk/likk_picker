@@ -396,7 +396,7 @@ class _GalleryViewState extends State<GalleryView>
                 controller: _controller,
                 entitiesNotifier: _controller._entitiesNotifier,
                 panelController: _controller._panelController,
-                onCameraRequest: _controller.openCamera,
+                onCameraRequest: _controller._openCamera,
                 onSelect: _controller._select,
               ),
             ),
@@ -821,7 +821,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// Open camera from [GalleryView]
-  Future<LikkEntity?> openCamera(BuildContext context) async {
+  Future<void> _openCamera(BuildContext context) async {
     _accessCamera = true;
     LikkEntity? entity;
 
@@ -842,7 +842,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     if (entity == null) {
       _accessCamera = false;
       _completer.complete(entities);
-      return null;
+      return;
     }
 
     if (setting.enableCropper && entity.entity.type == AssetType.image) {
@@ -851,7 +851,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       if (editedEntity != null) {
         entity = editedEntity;
       } else {
-        return null;
+        return;
       }
     }
     if (entities.length == setting.maximum) {
@@ -862,6 +862,38 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     _onSubmitted?.call(entities);
     _accessCamera = false;
     _completer.complete(entities);
+  }
+
+  /// Take photo with camera
+  Future<LikkEntity?> takePhoto(BuildContext context,
+      {bool saveImage = true}) async {
+    _accessCamera = true;
+    LikkEntity? entity;
+
+    final route = SlideTransitionPageRoute<LikkEntity>(
+      builder: CameraView(saveImage: saveImage),
+      begainHorizontal: true,
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+
+    entity = await Navigator.of(context).push(route);
+
+    if (entity == null) {
+      _accessCamera = false;
+      return null;
+    }
+
+    // if (setting.enableCropper && entity.entity.type == AssetType.image) {
+    //   // ignore: use_build_context_synchronously
+    //   final editedEntity = await openCropper(context, entity);
+    //   if (editedEntity != null) {
+    //     entity = editedEntity;
+    //   } else {
+    //     return;
+    //   }
+    // }
+
+    _accessCamera = false;
     return entity;
   }
 
@@ -895,7 +927,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     if (data == null) {
       return null;
     }
-    
+
     AssetEntity? assetEntity;
     if (setting.saveCropper) {
       assetEntity = await PhotoManager.editor.saveImage(data);

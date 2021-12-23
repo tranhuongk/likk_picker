@@ -22,6 +22,7 @@ class CamController extends ValueNotifier<ActionValue> {
     required BuildContext context,
     ResolutionPreset? resolutionPreset,
     ImageFormatGroup? imageFormatGroup,
+    this.saveImage = true,
   })  : _controllerNotifier = controllerNotifier,
         _uiHandler = UIHandler(context),
         zoom = Zoom(controllerNotifier),
@@ -39,6 +40,9 @@ class CamController extends ValueNotifier<ActionValue> {
 
   ///
   final Zoom zoom;
+
+  ///
+  final bool saveImage;
 
   ///
   final Exposure exposure;
@@ -166,10 +170,17 @@ class CamController extends ValueNotifier<ActionValue> {
       final xFile = await controller.takePicture();
       final file = File(xFile.path);
       final data = await file.readAsBytes();
-      final entity = await PhotoManager.editor.saveImage(
-        data,
-        title: path.basename(file.path),
-      );
+      final entity = saveImage
+          ? await PhotoManager.editor.saveImage(
+              data,
+              title: path.basename(file.path),
+            )
+          : AssetEntity(
+              id: path.basename(file.path),
+              typeInt: 1,
+              width: 100,
+              height: 100,
+            );
 
       if (file.existsSync()) {
         file.deleteSync();
@@ -265,10 +276,17 @@ class CamController extends ValueNotifier<ActionValue> {
       try {
         final xfile = await controller.stopVideoRecording();
         final file = File(xfile.path);
-        final entity = await PhotoManager.editor.saveVideo(
-          file,
-          title: path.basename(file.path),
-        );
+        final entity = saveImage
+            ? await PhotoManager.editor.saveVideo(
+                file,
+                title: path.basename(file.path),
+              )
+            : AssetEntity(
+                id: path.basename(file.path),
+                typeInt: 2,
+                width: 100,
+                height: 100,
+              );
         if (file.existsSync()) {
           file.deleteSync();
         }
