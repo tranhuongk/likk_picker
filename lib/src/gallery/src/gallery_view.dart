@@ -396,7 +396,7 @@ class _GalleryViewState extends State<GalleryView>
                 controller: _controller,
                 entitiesNotifier: _controller._entitiesNotifier,
                 panelController: _controller._panelController,
-                onCameraRequest: _controller._openCamera,
+                onCameraRequest: _controller.openCamera,
                 onSelect: _controller._select,
               ),
             ),
@@ -821,7 +821,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// Open camera from [GalleryView]
-  Future<void> _openCamera(BuildContext context) async {
+  Future<void> openCamera(BuildContext context) async {
     _accessCamera = true;
     LikkEntity? entity;
 
@@ -1011,6 +1011,14 @@ class GalleryController extends ValueNotifier<GalleryValue> {
         permission != PermissionState.limited) {
       PhotoManager.openSetting();
       return [];
+    }
+
+    if (selectedEntities?.isNotEmpty ?? false) {
+      _internal = true;
+      value = value.copyWith(
+        selectedEntities: selectedEntities,
+        previousSelection: true,
+      );
     }
 
     _repository.fetchAlbums(setting.requestType);
