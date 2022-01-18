@@ -396,7 +396,7 @@ class _GalleryViewState extends State<GalleryView>
                 controller: _controller,
                 entitiesNotifier: _controller._entitiesNotifier,
                 panelController: _controller._panelController,
-                onCameraRequest: _controller._openCamera,
+                onCameraRequest: _controller.openCamera,
                 onSelect: _controller._select,
               ),
             ),
@@ -821,7 +821,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// Open camera from [GalleryView]
-  Future<void> _openCamera(BuildContext context) async {
+  Future<void> openCamera(BuildContext context) async {
     _accessCamera = true;
     LikkEntity? entity;
 
@@ -1072,6 +1072,15 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       super.value = newValue;
       _internal = false;
     }
+  }
+
+  ///
+  GalleryValue get initValue => super.value;
+
+  ///
+  set initValue(GalleryValue newValue) {
+    super.value = newValue;
+    _internal = false;
   }
 
   @override
