@@ -1013,6 +1013,14 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       return [];
     }
 
+    if (selectedEntities?.isNotEmpty ?? false) {
+      _internal = true;
+      value = value.copyWith(
+        selectedEntities: selectedEntities,
+        previousSelection: true,
+      );
+    }
+
     _repository.fetchAlbums(setting.requestType);
     _completer = Completer<List<LikkEntity>>();
     galleryState.value = GalleryState.show;
@@ -1072,15 +1080,6 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       super.value = newValue;
       _internal = false;
     }
-  }
-
-  ///
-  GalleryValue get initValue => super.value;
-
-  ///
-  set initValue(GalleryValue newValue) {
-    super.value = newValue;
-    _internal = false;
   }
 
   @override
