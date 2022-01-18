@@ -315,3 +315,8 @@ If you encounter any problems feel free to open an [issue](https://github.com/tr
 # Maintainers
 
 - [Huong Tran](https://tranhuongk.xyz/)
+
+
+# Donate
+
+- [Paypal](https://www.paypal.com/paypalme/tranhuongk)

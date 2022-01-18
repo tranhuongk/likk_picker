@@ -1,5 +1,9 @@
+## [1.1.5+1] - 08/12/2021
+* Fix `selectedEntities` not set
+
 ## [1.1.5] - 08/12/2021
 * Update cropper with save and not save option
+
 ## [1.1.4] - 08/12/2021
 * Hide Hidden album 
 * Put Recents album to first
