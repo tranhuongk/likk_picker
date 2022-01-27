@@ -1,3 +1,5 @@
+## [1.1.5+2] - 08/12/2021
+* Update `photo_manager`
 ## [1.1.5+1] - 08/12/2021
 * Fix `selectedEntities` not set
 
