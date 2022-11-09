@@ -911,7 +911,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       return null;
     }
 
-    final croppedFile = await ImageCropper.cropImage(
+    final croppedFile = await ImageCropper().cropImage(
       sourcePath: file.path,
       androidUiSettings: const AndroidUiSettings(
         toolbarTitle: 'Cropper',
